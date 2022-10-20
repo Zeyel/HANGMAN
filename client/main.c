@@ -2,16 +2,16 @@
     Client side main for the application
     Contains the UI : A menu with some options
     Contains the input of the player and sending it to the server
-*/
+/////////////////////////////
 
 /* DEFINES */
 
-/**/
+/////////////////////////////
 
 /*  INCLUDES */
 #include <stdbool.h>
 #include <stdio.h>
-/**/
+/////////////////////////////
 
 void main () {
 
@@ -19,7 +19,6 @@ void main () {
     bool game = true; 
     int ans = 0;
     char choice;
-    /**/
     printf("Welcome to the HANGMAN Game" 
         "\n  by Tim BRANSTETT & Florent VAIDIE"
         "\n  Project for a Network course in our first year of our Master's degree"
