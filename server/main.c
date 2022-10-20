@@ -9,21 +9,21 @@
 /////////////////////////////
 
 /*  INCLUDES */
+#include <game/server_functions.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <game/functions.h>
 /////////////////////////////
 
-void main () {
+void main() {
     /* VARIABLES */
     bool on = true;
     char entry;
     /////////////////////////////
 
     printf("Enter a 'f' to exit.");
-    while (on == true) {
+    while(on == true) {
         scanf("%c", entry);
-        if (entry == "c") {
+        if(entry == "c") {
             on = false;
         }
     }

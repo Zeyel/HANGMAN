@@ -1,0 +1,4 @@
+#ifndef CLIENT_FUNCTIONS_H
+#define CLIENT_FUNCTIONS_H
+
+#endif
