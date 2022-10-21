@@ -14,7 +14,20 @@ char *state(int n) {
                /▀▀▀▀▀▀▀▀▀▀▀▀▀    
     */
     switch (n) {
-
+    case 0 :
+        return ("              "        // Line 1
+                "              "        // Line 2
+                "              "        // Line 3
+                "              "        // Line 4
+                "              "        // Line 5
+                "              "        // Line 6
+                "              "        // Line 7
+                "              "        // Line 8
+                "              "        // Line 9
+                "              "        // Line 10
+                "              "        // Line 11
+                );
+                break;
     case 1 :
         return ("              "        // Line 1
                 "              "        // Line 2
@@ -717,7 +730,7 @@ char *state(int n) {
                 break;
     case 51 :
         return ("══╦══════════╗"        // Line 1
-                "             ║"        // Line 2
+                "  │          ║"        // Line 2
                 "             ║"        // Line 3
                 "             ║"        // Line 4
                 "             ║"        // Line 5
@@ -732,7 +745,7 @@ char *state(int n) {
     case 52 :
         return ("══╦══════════╗"        // Line 1
                 "  │          ║"        // Line 2
-                "             ║"        // Line 3
+                "  O          ║"        // Line 3
                 "             ║"        // Line 4
                 "             ║"        // Line 5
                 "             ║"        // Line 6
@@ -747,7 +760,7 @@ char *state(int n) {
         return ("══╦══════════╗"        // Line 1
                 "  │          ║"        // Line 2
                 "  O          ║"        // Line 3
-                "             ║"        // Line 4
+                "  ╬          ║"        // Line 4
                 "             ║"        // Line 5
                 "             ║"        // Line 6
                 "             ║"        // Line 7
@@ -761,7 +774,7 @@ char *state(int n) {
         return ("══╦══════════╗"        // Line 1
                 "  │          ║"        // Line 2
                 "  O          ║"        // Line 3
-                "  ╬          ║"        // Line 4
+                "  ╬╕         ║"        // Line 4
                 "             ║"        // Line 5
                 "             ║"        // Line 6
                 "             ║"        // Line 7
@@ -775,7 +788,7 @@ char *state(int n) {
         return ("══╦══════════╗"        // Line 1
                 "  │          ║"        // Line 2
                 "  O          ║"        // Line 3
-                "  ╬╕         ║"        // Line 4
+                " ╒╬╕         ║"        // Line 4
                 "             ║"        // Line 5
                 "             ║"        // Line 6
                 "             ║"        // Line 7
@@ -790,7 +803,7 @@ char *state(int n) {
                 "  │          ║"        // Line 2
                 "  O          ║"        // Line 3
                 " ╒╬╕         ║"        // Line 4
-                "             ║"        // Line 5
+                "  ║          ║"        // Line 5
                 "             ║"        // Line 6
                 "             ║"        // Line 7
                 "             ║"        // Line 8
@@ -804,7 +817,7 @@ char *state(int n) {
                 "  │          ║"        // Line 2
                 "  O          ║"        // Line 3
                 " ╒╬╕         ║"        // Line 4
-                "  ║          ║"        // Line 5
+                "  ║│         ║"        // Line 5
                 "             ║"        // Line 6
                 "             ║"        // Line 7
                 "             ║"        // Line 8
@@ -818,7 +831,7 @@ char *state(int n) {
                 "  │          ║"        // Line 2
                 "  O          ║"        // Line 3
                 " ╒╬╕         ║"        // Line 4
-                "  ║│         ║"        // Line 5
+                " │║│         ║"        // Line 5
                 "             ║"        // Line 6
                 "             ║"        // Line 7
                 "             ║"        // Line 8
@@ -833,7 +846,7 @@ char *state(int n) {
                 "  O          ║"        // Line 3
                 " ╒╬╕         ║"        // Line 4
                 " │║│         ║"        // Line 5
-                "             ║"        // Line 6
+                "  ╩          ║"        // Line 6
                 "             ║"        // Line 7
                 "             ║"        // Line 8
                 "             ║"        // Line 9
@@ -847,7 +860,7 @@ char *state(int n) {
                 "  O          ║"        // Line 3
                 " ╒╬╕         ║"        // Line 4
                 " │║│         ║"        // Line 5
-                "  ╩          ║"        // Line 6
+                "  ╩╕          ║"        // Line 6
                 "             ║"        // Line 7
                 "             ║"        // Line 8
                 "             ║"        // Line 9
@@ -861,7 +874,7 @@ char *state(int n) {
                 "  O          ║"        // Line 3
                 " ╒╬╕         ║"        // Line 4
                 " │║│         ║"        // Line 5
-                "  ╩╕          ║"        // Line 6
+                " ╒╩╕         ║"        // Line 6
                 "             ║"        // Line 7
                 "             ║"        // Line 8
                 "             ║"        // Line 9
@@ -876,20 +889,6 @@ char *state(int n) {
                 " ╒╬╕         ║"        // Line 4
                 " │║│         ║"        // Line 5
                 " ╒╩╕         ║"        // Line 6
-                "             ║"        // Line 7
-                "             ║"        // Line 8
-                "             ║"        // Line 9
-                " /┴┬┴┬┴┬┴┬┴┬┴║"        // Line 10
-                "/▀▀▀▀▀▀▀▀▀▀▀▀▀"        // Line 11
-                );
-                break;
-    case 63 :
-        return ("══╦══════════╗"        // Line 1
-                "  │          ║"        // Line 2
-                "  O          ║"        // Line 3
-                " ╒╬╕         ║"        // Line 4
-                " │║│         ║"        // Line 5
-                " ╒╩╕         ║"        // Line 6
                 "   │         ║"        // Line 7
                 "             ║"        // Line 8
                 "             ║"        // Line 9
@@ -897,7 +896,7 @@ char *state(int n) {
                 "/▀▀▀▀▀▀▀▀▀▀▀▀▀"        // Line 11
                 );
                 break;
-    case 64 :
+    case 63 :
         return ("══╦══════════╗"        // Line 1
                 "  │          ║"        // Line 2
                 "  O          ║"        // Line 3

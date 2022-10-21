@@ -11,11 +11,12 @@
 /*TYPES*/
 typedef enum {
     vs_server = 1, vs_player, player_vs_player;
-} game_type_t;
+} game_type_t;                                      // Options for a game
 typedef struct {
     int tries = 8;
     int min = 0;
     int max = 0;
+    int state = 64 - tries;
     char *list = "word_list.txt";
     game_type_t type = vs_server;
 } options_t;
@@ -30,6 +31,7 @@ void list_load(char* list);                         // Load an existing list for
 void modify_tries(int nb);                          // Set the tries of the game
 void word_min(int min);                             // Set the minimum length of a word
 void word_max(int max);                             // Set the maximum length of a word
-void set_game_type(game_type_t type);               // Set the game_type of the game              
+void set_game_type(game_type_t type);               // Set the game_type of the game
+int current_state (int n);                          // Return the current state of the game              
 /////////////////////////////
 #endif
