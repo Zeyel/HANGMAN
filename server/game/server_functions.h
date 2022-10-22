@@ -14,15 +14,19 @@ typedef enum {
     vs_player,
     player_vs_player
 } game_type_t; // Options for a game
-typedef struct {
-    char *name = "John Doe";
-    int tries = 8;
-    int min = 0;
-    int max = 0;
-    int state = 64 - tries;
-    char *list = "word_list.txt";
-    game_type_t type = vs_server;
+typedef options_t struct {
+    char *name;
+    int tries;
+    int min;
+    int max;
+    int state;
+    char *list;
+    game_type_t type;
 } options_t;
+/////////////////////////////
+
+/*VARIABLES*/
+options_t game_options = {"John Doe", 8, 0, 0, 64-tries, "word_list.txt", vs_server};
 /////////////////////////////
 
 /*FUNCTIONS*/
