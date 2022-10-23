@@ -6,15 +6,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <unistd.h>
+#include <sys.socket.h>
 /////////////////////////////
 
-/*TYPES*/
+/*ENUM*/
 typedef enum {
     vs_server = 1,
     vs_player,
     player_vs_player
 } game_type_t; // Options for a game
-typedef options_t struct {
+/////////////////////////////
+/*STRUCT*/
+
+typedef struct {
     char *name;
     int tries;
     int min;
@@ -26,7 +31,7 @@ typedef options_t struct {
 /////////////////////////////
 
 /*VARIABLES*/
-options_t game_options = {"John Doe", 8, 0, 0, 64-tries, "word_list.txt", vs_server};
+options_t game_options = {"John Doe", 8, 0, 0, 56, "word_list.txt", vs_server};
 /////////////////////////////
 
 /*FUNCTIONS*/

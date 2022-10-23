@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#include <unistd.h>
+#include <sys.socket.h>
 /////////////////////////////
 
 /*TYPES*/
@@ -21,13 +23,14 @@ typedef struct {
     int max;
     int state;
     char *list;
-    game_type_t;
+    game_type_t type;
 } options_t;
 /////////////////////////////
 
 
 /*FUNCTIONS*/
 char *state(int n);                 // Return the ASCII Art for the Hangman at different possible state
+int connect();                      // Create the socket with the server
 int start_game();                   // Try to reach the server to start a game
 int send_letter(char letter);       // Send a letter to the server, return an int to be sure that the function succeeded
 int send_options();                 // Send options to the server, return an int to be sure that the function succeeded
