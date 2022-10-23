@@ -9,8 +9,6 @@
 /////////////////////////////
 
 /*  INCLUDES */
-#include <stdbool.h>
-#include <stdio.h>
 #include <client_functions.h>
 /////////////////////////////
 
