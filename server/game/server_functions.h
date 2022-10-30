@@ -27,16 +27,18 @@ typedef struct {
     int max;
     int state;
     char *list;
+    int time;
     game_type_t type;
 } options_t;
 /////////////////////////////
 
 /*VARIABLES*/
-options_t game_options = {"John Doe", 8, 0, 0, 56, "word_list.txt", vs_server};
+options_t game_options = {"John Doe", 8, 0, 0, 56, "word_list.txt", vs_server, 0};
 /////////////////////////////
 
 /*FUNCTIONS*/
 char *load(char *data);               // Load a file with the name data, return a string of the data found in the file with ~ as a separator for each line
+void load_rules(char *name)           // Load a ruleset with a specific name in a specific folder
 int random(int max);                  // Return a random int between 0 and max, in order to pick a random item from a table
 int max_size(char table[]);           // Return the size of a table
 void add_word(char *word);            // Add a word to custom_list.txt
