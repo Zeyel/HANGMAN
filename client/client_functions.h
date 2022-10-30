@@ -25,6 +25,7 @@ typedef struct {
     int max;
     int state;
     char *list;
+    int time;
     game_type_t type;
 } options_t;
 /////////////////////////////
@@ -34,6 +35,7 @@ typedef struct {
 char *state(int n);                 // Return the ASCII Art for the Hangman at different possible state
 int connect();                      // Create the socket with the server
 int start_game();                   // Try to reach the server to start a game
+void create_ruleset(char *name)     // Create a ruleset and save a txt file in a folder
 int send_letter(char letter);       // Send a letter to the server, return an int to be sure that the function succeeded
 int send_options();                 // Send options to the server, return an int to be sure that the function succeeded
 int send_name(char *name);          // Send a nickname to the server, return an int to be sure that the function succeeded
