@@ -60,7 +60,8 @@ int main(){
                     printf("\nMade by :"
                            "\n- Tim BRANSTETT : https://github.com/Zeyel"
                            "\n- Florent VAIDIE : https://github.com/Lyner-Eoria"
-                           "\n   From scratch with our bare hands (we tried to punch the monitor first, wasn't our greatest idea");
+                           "\n   From scratch with our bare hands (we tried to punch the monitor first, wasn't our greatest idea)"
+                           "\n\n");
                     break;
                 case 'r':
                     printf("\nRules :"
@@ -72,7 +73,8 @@ int main(){
                            "\n  If you manage to guess the word before, you win"
                            "\n"
                            "\n  You have the possibility from the options menu, to change the rules of the game,"
-                           "\n  feel free to explore them");
+                           "\n  feel free to explore them"
+                           "\n\n");
                     break;
                 case 'n':
                    // send_name(hangman_options.name);

@@ -1,6 +1,10 @@
 /*INCLUDES*/
 #include <client_functions.h>   // C'est pas une erreur, c'est Windows
 
+/*VARIABLES*/
+int socket_tcp = socket(IPV4, TCP, PROTOCOL);
+/////////////////////////////
+
 /*FUNCTIONS*/
 int connect() {}                      // Create the socket with the server
 int start_game() {}                   // Try to reach the server to start a game

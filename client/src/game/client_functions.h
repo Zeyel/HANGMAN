@@ -6,8 +6,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include "../connection/global_var.h"
 /////////////////////////////
-
 /*TYPES*/
 typedef enum {
     vs_server = 1, 
@@ -25,8 +28,9 @@ typedef struct {
     game_type_t type;
 } options_t;
 /////////////////////////////
+/*VARIABLES*/
 options_t hangman_options = {"", 0, 0, 0, 0, "", 0, 0};
-
+/////////////////////////////
 /*FUNCTIONS*/
 void state(int n);                 // Return the ASCII Art for the Hangman at different possible state
 int connect();                      // Create the socket with the server

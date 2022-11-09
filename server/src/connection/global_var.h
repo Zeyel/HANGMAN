@@ -1,0 +1,5 @@
+/*DEFINE SOCKETS*/
+#define CONNECT_PORT 50000
+#define IPV4 PF_INET
+#define TCP SOCK_STREAM
+#define PROTOCOL 0
