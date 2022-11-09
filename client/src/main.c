@@ -1,25 +1,25 @@
 /*  MAIN
     Client side main for the application
-    Contains the UI : A menu with some options
+    Contains the UI : A menu with some hangman_options
     Contains the input of the player and sending it to the server
-/////////////////////////////
+*/////////////////////////////
 
 /* DEFINES */
 
 /////////////////////////////
 
 /*  INCLUDES */
-#include <client_functions.h>
+#include <game/client_functions.h>
 /////////////////////////////
 
-void main(){
+int main(){
 
     /*  VARIABLES */
     bool game = true;   // Close the game if false
     int loop = 0;       // To loop with the while
     char choice;        // Choices in menus or letter in the game
-    char *word;         // If the player wants to guess the whole word
-    options_t options;  // Contains a char* name, an int tries, an int min, an int max, an int state and a char* list
+    //char *word;         // If the player wants to guess the whole word
+    //options_t options;  // Contains a char* name, an int tries, an int min, an int max, an int state and a char* list
     /////////////////////////////
 
     printf("Welcome to the HANGMAN Game"
@@ -27,16 +27,16 @@ void main(){
            "\n  Project for a Network course in our first year of our Master's degree"
            "\n  The goal is to code a Hangman with a client and a server, make them communicate together"
            "\n\n");
+        hangman_options.name = malloc(256);
     do {
-     
         printf("\nPlease enter your name :");
-        scanf("%s", &options.name);
-        printf("\nHello %s", options.name);
+        scanf(" %s", hangman_options.name);
+        printf("\nHello %s", hangman_options.name);
         printf("\n Does the name suits you ?"
                "\n 'y' for yes, 'n' for no : ");
-        scanf("%c", &choice);
+        scanf(" %c", &choice);
     } while (choice != 'y');
-    choice = 0;                                                             // emptying the choice option as a security
+    choice = 0; // emptying the choice option as a security
     do{
         printf("\nMain Menu :"
                "\n   Press 'r' if you want to see the game rules"
@@ -46,14 +46,14 @@ void main(){
                "\n   Press 'q' to quit the game"
                "\n");
         do{
-            loop = scanf("%c", &choice);
+            loop = scanf(" %c", &choice);
             if (loop == 0){
-                printf("\nAn error has been made, let'start again");
+                printf("\nAn error has been made, let'start again\n");
             }
             else{
                 switch (choice){
                 case 'q':
-                    printf("\nThank you for playing. Good bye !");
+                    printf("\nThank you for playing. Good bye !\n");
                     game = false;
                     break;
                 case 'c':
@@ -75,7 +75,7 @@ void main(){
                            "\n  feel free to explore them");
                     break;
                 case 'n':
-                    send_name(options.name);
+                   // send_name(hangman_options.name);
                     break;
                 case 'o':
                     loop = 0;
@@ -84,24 +84,25 @@ void main(){
                                "\n Press 's' to see the current settings"
                                "\n Press 'c' to change the settings"
                                "\n Press 'n' to change your name"
-                               "\n ¨Press '/' to go back to the main menu");
-                        loop = scanf("%c", &choice);
+                               "\n Press '/' to go back to the main menu"
+                               "\n\n");
+                        loop = scanf(" %c", &choice);
                         if (loop == 0){
-                            printf("An error has been made, let'start again");
+                            printf("\n\nAn error has been made, let'start again");
                         }
                         else{
                             switch (choice){
                             case 's':
-                                printf(recieve_options());
+                               // printf(recieve_options());
                                 loop = 0; // to loop in options menu if wanted
-                                break;
+                                    break;
                             case 'c':
                                 loop = 0;
                                 break;
                             case 'n':
                                 printf("\nPlease enter a new nickname :");
-                                loop = scanf("%s", &options.name);
-                                send_name(options.name); // Envoi d'un nouveau nom au serveur
+                                loop = scanf("%s", hangman_options.name);
+                              //  send_name(hangman_options.name); // Envoi d'un nouveau nom au serveur
                                 loop = 0;
                                 break;
                             case '/':
@@ -110,7 +111,7 @@ void main(){
                         }
                     } while (loop == 0);
                 default:
-                    printf("An error has been made, let's start again");
+                    printf("\n\nAn error has been made, let's start again");
                     loop = 0;
                     break;
                 }

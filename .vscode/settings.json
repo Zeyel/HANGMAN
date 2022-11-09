@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "client_functions.h": "c"
+    },
+    "files.autoSave": "afterDelay"
+}
