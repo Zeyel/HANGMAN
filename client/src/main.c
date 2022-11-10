@@ -9,7 +9,7 @@
 /////////////////////////////
 
 /*  INCLUDES */
-#include <game/client_functions.h>
+#include "game/client_functions.h"
 /////////////////////////////
 
 int main(){
@@ -18,6 +18,7 @@ int main(){
     bool game = true;   // Close the game if false
     int loop = 0;       // To loop with the while
     char choice;        // Choices in menus or letter in the game
+    int c = 0;
     //char *word;         // If the player wants to guess the whole word
     //options_t options;  // Contains a char* name, an int tries, an int min, an int max, an int state and a char* list
     /////////////////////////////
@@ -77,7 +78,17 @@ int main(){
                            "\n\n");
                     break;
                 case 'n':
-                   // send_name(hangman_options.name);
+                   if ((c = connect_server()) != -1) {
+                    printf("Welcome to the Server");
+                    if ((c = close_connection()) != -1) {
+                        printf("Disconnected from the server");
+
+                    } else {
+                        printf("Error when trying to disconnect from the server");
+                    }
+                   } else {
+                    printf("Error when trying to connect to the server");
+                   };
                     break;
                 case 'o':
                     loop = 0;

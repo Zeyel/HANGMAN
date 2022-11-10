@@ -1,6 +1,8 @@
 {
     "files.associations": {
-        "client_functions.h": "c"
+        "client_functions.h": "c",
+        "global_var.h": "c",
+        "connection_server.h": "c"
     },
     "files.autoSave": "afterDelay"
 }

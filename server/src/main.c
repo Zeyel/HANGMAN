@@ -2,30 +2,40 @@
     Server side main for the application
     Contains the UI : A menu with some options
     Contains the input of the player and sending it to the server
-*/////////////////////////////
+*/
+////////////////////////////
 
 /* DEFINES */
 
 /////////////////////////////
 
 /*  INCLUDES */
-#include <game/server_functions.h>  // C'est pas une erreur, c'est Windows
+#include "game/server_functions.h" // C'est pas une erreur, c'est Windows
 #include <stdbool.h>
 #include <stdio.h>
+#include "connection/connection_server.h"
+#include <pthread.h>
 /////////////////////////////
 
-int main() {
+int main()
+{
     /* VARIABLES */
-    bool on = true;
-    char entry;
+    char s[20];
     /////////////////////////////
-
-    printf("Enter a 'e' to exit.\nResponse :");
-    while(on == true) {
-        scanf("%c", &entry);
-        if(entry == 'e') {
-            on = false;
+    init_server();
+    int c = 0;
+    printf("Waiting for clients\n");
+    while (1)
+    {
+        if ((c = connect_client()) != -1)
+        {
+            printf("Client connected (%d)\n", c);
+            pthread_create(NULL, NULL, start_game, &c);
         }
+        else
+        {
+            perror("Error when connecting to client\n");
+        }
+        c = 0;
     }
-    printf("Good bye.\n");
 }

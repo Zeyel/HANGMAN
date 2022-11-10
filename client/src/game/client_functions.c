@@ -1,8 +1,7 @@
 /*INCLUDES*/
-#include <client_functions.h>   // C'est pas une erreur, c'est Windows
+#include "client_functions.h"   // C'est pas une erreur, c'est Windows
 
 /*VARIABLES*/
-int socket_tcp = socket(IPV4, TCP, PROTOCOL);
 /////////////////////////////
 
 /*FUNCTIONS*/
