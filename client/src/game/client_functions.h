@@ -28,12 +28,8 @@ typedef struct {
     game_type_t type;
 } options_t;
 /////////////////////////////
-/*VARIABLES*/
-options_t hangman_options = {"", 0, 0, 0, 0, "", 0, 0};
-/////////////////////////////
 /*FUNCTIONS*/
 void state(int n);                 // Return the ASCII Art for the Hangman at different possible state
-int connect();                      // Create the socket with the server
 int start_game();                   // Try to reach the server to start a game
 void create_ruleset(char *name);     // Create a ruleset and save a txt file in a folder
 int send_letter(char letter);       // Send a letter to the server, return an int to be sure that the function succeeded

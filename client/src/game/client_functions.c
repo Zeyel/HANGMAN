@@ -5,7 +5,6 @@
 /////////////////////////////
 
 /*FUNCTIONS*/
-int connect() {}                      // Create the socket with the server
 int start_game() {}                   // Try to reach the server to start a game
 void create_ruleset(char *name) {}     // Create a ruleset and save a txt file in a folder
 int send_letter(char letter) {}       // Send a letter to the server, return an int to be sure that the function succeeded
