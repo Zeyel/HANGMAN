@@ -6,40 +6,78 @@
 
 /*FUNCTIONS*/
 int start_game() {}                   // Try to reach the server to start a game
-int create_ruleset(char *name, game_type_t server) {
+int create_ruleset(char *name, options_t server) {
         int i_answer =0;
-        char c_answer = '';
+        char c_answer;
         char *txt_answer;
 
-        printf("\n\nModification des règles");
+        printf("\nChanging rules");
 
-        game_type_t custom_rules;
-        custom_rules->name = name;
+        options_t custom_rules;
+        custom_rules.name = name;
         do {
-            printf("\n\nSouhaitez vous modifier le nombre d'essais ? y/n"
-                   "\n Valeur actuelle : %d \n", server.tries);
-            scanf(" %c", c_answer);
+            printf("\n\nDo you wish to modify the number of tries ? y/n"
+                   "\n Current value : %d \n", server.tries);
+            scanf(" %c", &c_answer);
             if (c_answer == 'y') {
                 do {
-                printf("\nPour quelle valeur ? (comprise entre 1 et 64): ");
-                scanf(" %d", i_answer);
+                printf("\nTo which value ? (between 1 and 64): ");
+                scanf(" %d", &i_answer);
                 } while (i_answer < 1 || i_answer > 64);
                 custom_rules.tries = i_answer;
                 custom_rules.state = 64 - custom_rules.tries;
             }
         } while ((c_answer != 'y') && (c_answer != 'n'));
-
-        
-
-
+        do
+        {
+            printf("\n\nDo you wish to modify the minimum length of the word ? y/n"
+                   "\n Current value : %d \n",
+                   server.min);
+            scanf(" %c", &c_answer);
+            if (c_answer == 'y')
+            {
+                do
+                {
+                    printf("\nTo which value ? (between 0 and 15): ");
+                    scanf(" %d", &i_answer);
+                } while (i_answer < 0 || i_answer > 15);
+                custom_rules.min = i_answer;
+            }
+        } while ((c_answer != 'y') && (c_answer != 'n'));
+        do
+        {
+            printf("\n\nDo you wish to modify the maximum length of a word ? y/n"
+                   "\n Current value : %d \n",
+                   server.max);
+            scanf(" %c", &c_answer);
+            if (c_answer == 'y')
+            {
+                do
+                {
+                    printf("\nTo which value ? (between 0 and 20 and more than the min): ");
+                    scanf(" %d", &i_answer);
+                } while (i_answer < 1 || i_answer > 64 || i_answer < custom_rules.min);
+                custom_rules.max = i_answer;
+            }
+        } while ((c_answer != 'y') && (c_answer != 'n'));
+        do
+        {
+            printf("\n\nDo you wish to modify the time limit ? y/n"
+                   "\n Current value : %d \n",
+                   server.time);
+            scanf(" %c", &c_answer);
+            if (c_answer == 'y')
+            {
+                do
+                {
+                    printf("\nTo which value ? (between 0 and 15 minutes): ");
+                    scanf(" %d", &i_answer);
+                } while (i_answer < 0 || i_answer > 15);
+                custom_rules.time = i_answer;
+            }
+        } while ((c_answer != 'y') && (c_answer != 'n'));
+        return 1;
 }     // Create a ruleset and send it to the server
-int send_letter(char letter) {}       // Send a letter to the server, return an int to be sure that the function succeeded
-int send_options() {}                 // Send options to the server, return an int to be sure that the function succeeded
-int send_name(char *name){}          // Send a nickname to the server, return an int to be sure that the function succeeded
-char *recieve_options(){}            // Recieve the options from the server
-int recieve_life() {}                 // Recieve the current life of the player
-char *recieve_name() {}               // Recieve the stored name of the player from the server
-
 /////////////////////////////
 
 void state(int n) {

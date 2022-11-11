@@ -127,6 +127,10 @@ int main()
                                 loop = 0; // to loop in options menu if wanted
                                 break;
                             case 'c':
+                                if (create_ruleset(hangman_options.name, hangman_options) == -1)
+                                {
+                                    perror("Error trying to reach the server");
+                                }
                                 loop = 0;
                                 break;
                             case 'n':

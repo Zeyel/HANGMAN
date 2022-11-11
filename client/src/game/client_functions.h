@@ -24,13 +24,7 @@ typedef struct {
 /*FUNCTIONS*/
 void state(int n);                 // Return the ASCII Art for the Hangman at different possible state
 int start_game();                   // Try to reach the server to start a game
-int create_ruleset(char *name, game_type_t default);     // Create a ruleset and send it to the server
-int send_letter(char letter);       // Send a letter to the server, return an int to be sure that the function succeeded
-int send_options();                 // Send options to the server, return an int to be sure that the function succeeded
-int send_name(char *name);          // Send a nickname to the server, return an int to be sure that the function succeeded
-char *recieve_options();            // Recieve the options from the server
-int recieve_life();                 // Recieve the current life of the player
-char *recieve_name();               // Recieve the stored name of the player from the server
+int create_ruleset(char *name, options_t server);     // Create a ruleset and send it to the server
 
 /////////////////////////////
 
