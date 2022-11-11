@@ -4,9 +4,6 @@
 #define MAXWORD 20
 
 /*INCLUDES*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "../connection/connection_server.h"
 /////////////////////////////
 

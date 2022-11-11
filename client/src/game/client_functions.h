@@ -2,13 +2,6 @@
 #define CLIENT_FUNCTIONS_H
 
 /*INCLUDES*/
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
 #include "../connection/global_var.h"
 /////////////////////////////
 /*TYPES*/
@@ -31,7 +24,7 @@ typedef struct {
 /*FUNCTIONS*/
 void state(int n);                 // Return the ASCII Art for the Hangman at different possible state
 int start_game();                   // Try to reach the server to start a game
-void create_ruleset(char *name);     // Create a ruleset and save a txt file in a folder
+int create_ruleset(char *name, game_type_t default);     // Create a ruleset and send it to the server
 int send_letter(char letter);       // Send a letter to the server, return an int to be sure that the function succeeded
 int send_options();                 // Send options to the server, return an int to be sure that the function succeeded
 int send_name(char *name);          // Send a nickname to the server, return an int to be sure that the function succeeded

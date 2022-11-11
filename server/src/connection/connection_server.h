@@ -2,7 +2,6 @@
 #define CONNECTION_SERVER_H
 
 #include "global_var.h"
-#include <string.h>
 
 //VARIABLES
 

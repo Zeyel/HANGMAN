@@ -1,10 +1,17 @@
 #ifndef GLOBAL_VAR_H
 #define GLOBAL_VAR_H
 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 /*DEFINE SOCKETS*/
 #define CONNECT_PORT 50000

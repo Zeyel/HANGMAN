@@ -20,7 +20,7 @@ int main()
     bool game = true; // Close the game if false
     int loop = 0;     // To loop with the while
     char choice;      // Choices in menus or letter in the game
-    int c = 0;
+    int check = 0;
     // char *word;         // If the player wants to guess the whole word
     options_t hangman_options = {"", 0, 0, 0, 0, "", 0, 0};
     /////////////////////////////
@@ -86,10 +86,10 @@ int main()
                            "\n\n");
                     break;
                 case 'n':
-                    if ((c = connect_server()) != -1)
+                    if ((check = connect_server()) != -1)
                     {
                         printf("\nWelcome to the Server");
-                        if ((c = close_connection()) != -1)
+                        if ((check = close_connection()) != -1)
                         {
                             printf("\nDisconnected from the server");
                         }

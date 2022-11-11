@@ -6,7 +6,33 @@
 
 /*FUNCTIONS*/
 int start_game() {}                   // Try to reach the server to start a game
-void create_ruleset(char *name) {}     // Create a ruleset and save a txt file in a folder
+int create_ruleset(char *name, game_type_t server) {
+        int i_answer =0;
+        char c_answer = '';
+        char *txt_answer;
+
+        printf("\n\nModification des règles");
+
+        game_type_t custom_rules;
+        custom_rules->name = name;
+        do {
+            printf("\n\nSouhaitez vous modifier le nombre d'essais ? y/n"
+                   "\n Valeur actuelle : %d \n", server.tries);
+            scanf(" %c", c_answer);
+            if (c_answer == 'y') {
+                do {
+                printf("\nPour quelle valeur ? (comprise entre 1 et 64): ");
+                scanf(" %d", i_answer);
+                } while (i_answer < 1 || i_answer > 64);
+                custom_rules.tries = i_answer;
+                custom_rules.state = 64 - custom_rules.tries;
+            }
+        } while ((c_answer != 'y') && (c_answer != 'n'));
+
+        
+
+
+}     // Create a ruleset and send it to the server
 int send_letter(char letter) {}       // Send a letter to the server, return an int to be sure that the function succeeded
 int send_options() {}                 // Send options to the server, return an int to be sure that the function succeeded
 int send_name(char *name){}          // Send a nickname to the server, return an int to be sure that the function succeeded

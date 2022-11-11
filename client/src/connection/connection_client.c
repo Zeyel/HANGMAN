@@ -14,3 +14,5 @@ int connect_server() {
 int close_connection() {
     return (close(socket_client));
 }
+
+int recieve_data(int server, char *buffer) {}
