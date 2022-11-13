@@ -25,6 +25,17 @@ int init_server()
 int connect_client()
 {
     return accept(server_socket, NULL, NULL);
+    pthread_t thread;
+    int *pclient = malloc(sizeof(int));
+    *pclient = server_socket;
+    pthread_create(&thread, NULL, wait_client, pclient);
+}
+
+void * wait_client(void * p_server_socket) {
+    int client_socket = *((int*)p_server_socket);
+    free(p_server_socket);
+    printf("Thread successfully created");
+    return NULL;
 }
 
 int send_rules(int client){

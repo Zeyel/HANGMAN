@@ -21,6 +21,7 @@ int main()
 {
     /* VARIABLES */
     char s[20];
+    pthread_t thread;
     /////////////////////////////
     init_server();
     int c = 0;
@@ -30,7 +31,6 @@ int main()
         if ((c = connect_client()) != -1)
         {
             printf("Client connected (%d)\n", c);
-            pthread_create(NULL, NULL, start_game, &c);
         }
         else
         {

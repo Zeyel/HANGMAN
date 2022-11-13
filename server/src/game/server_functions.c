@@ -78,5 +78,5 @@ int current_state(int n) {
 void *start_game(void *client)
 {
     
-    close(client);
+    return NULL;
 }
