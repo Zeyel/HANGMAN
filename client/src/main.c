@@ -1,5 +1,6 @@
 /*  INCLUDES */
 #include "game/client_functions.h"
+#include "connection/connection_client.h"
 /////////////////////////////
 
 int main()
@@ -7,10 +8,12 @@ int main()
     if (connect_server() != -1)
     {
         printf("\nWelcome to the Server\n");
-        // if (close_connection() == -1)
-        // {
-        //     perror("\nError when trying to close the connection\n");
-        // }
+        char *name = malloc(256);
+        name = "Johnny";
+        if (send_name(name) == -1) {
+            printf("ERROR");
+        }
+        printf("Name sent\n");
     }
     else
     {

@@ -24,17 +24,27 @@ int init_server()
 
 int connect_client()
 {
-    return accept(server_socket, NULL, NULL);
+    if (accept(server_socket, NULL, NULL) == -1){
+        return -1;
+    }
     pthread_t thread;
     int *pclient = malloc(sizeof(int));
     *pclient = server_socket;
-    pthread_create(&thread, NULL, wait_client, pclient);
+    return pthread_create(&thread, NULL, &wait_client, pclient);
 }
 
-void * wait_client(void * p_server_socket) {
+void *wait_client(void * p_server_socket) {
+    printf("\nSocket pointé: %d", *((int*)p_server_socket));
     int client_socket = *((int*)p_server_socket);
+    printf("\nInstance locale: %d", client_socket);
     free(p_server_socket);
-    printf("Thread successfully created");
+    char *msg = malloc(256);
+    printf("\nThread successfully created\n");
+    if (recv(client_socket, msg, sizeof msg, 0) == -1) {
+        printf("ERROR recv()\n");
+    } else {
+    printf("\n Client's name : %s \n", msg);
+    }
     return NULL;
 }
 

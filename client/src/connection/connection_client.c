@@ -17,12 +17,13 @@ int close_connection() {
 }
 
 int send_name(char *name) {
-    return send(socket_client, name, strlen(name), MSG_DONTWAIT);
+    printf("Your name : %s \n", name);
+    return send(socket_client, name, sizeof name, 0);
 }
 
 int send_letter (char letter) {
     char *s = letter;
-    return send(socket_client, &s, strlen(s), MSG_DONTWAIT);
+    return send(socket_client, &s, strlen(s), 0);
 }
 
 char *recieve_name() {
