@@ -11,13 +11,14 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define MSG_QUIT       -1
-#define MSG_START_GAME 1
-#define MSG_CHEAT_CODE 666
-#define MSG_OPTIONS    2
-#define MSG_ADD        3
-#define MSG_LETTER     4
-#define MSG_WORD       5
+#define MSG_QUIT        -1
+#define MSG_CHEAT_CODE  666
+#define MSG_START_GAME  1
+#define MSG_OPTIONS     2
+#define MSG_OPTIONS_REQ 3
+#define MSG_ADD_WORD    4
+#define MSG_LETTER      5
+#define MSG_WORD        6
 
 #define MSG_SIZE 128
 

@@ -7,30 +7,6 @@
 #include "../connection/connection_server.h"
 /////////////////////////////
 
-/*ENUM*/
-typedef enum {
-    vs_server = 1,
-    vs_player,
-    player_vs_player
-} game_type_t;
-/////////////////////////////
-/*STRUCT*/
-
-typedef struct {
-    char *name;
-    int tries;
-    int min;
-    int max;
-    int state;
-    char *list;
-    int time;
-    game_type_t type;
-} options_t; // Options for a game
-/////////////////////////////
-
-/*VARIABLES*/
-/////////////////////////////
-
 /*FUNCTIONS*/
 void load_rules();                                        // Load a ruleset with a specific name in a specific folder
 int randomizer(int max);                                  // Return a random int between 0 and max, in order to pick a random item from a table
