@@ -989,3 +989,5 @@ void state(int n) {
             perror("ERROR");
     }
 }
+
+void quit_game() {}

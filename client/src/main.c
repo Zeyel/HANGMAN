@@ -34,6 +34,7 @@ void print_rules() {
 void options_menu() {
     char choice = 'a';
     int loop = 1;
+    options_t hangman_options;
     while(loop) {
         printf("\nOptions menu :"
                "\n Press 's' to see the current settings"
@@ -42,12 +43,12 @@ void options_menu() {
                "\n Press '/' to go back to the main menu"
                "\n\n");
 
-        if(!scanf(" %c", &choice);)
+        if(!scanf(" %c", &choice))
             printf("\n\nAn error has occured, let'start again");
         else
             switch(choice) {
                 case 's':
-                    printf(recieve_options()); // print_options();
+                    printf(receive_options()); // print_options();
                     loop = 0;
                     break;
                 case 'c':
@@ -72,10 +73,10 @@ void options_menu() {
 }
 
 int main() {
-    char choice 'a';
+    char choice = 'a';
     print_menu();
     while(choice != 'q') {
-        if(!scanf(" %c", &choice);)
+        if(!scanf(" %c", &choice))
             perror("\nAn error has occured:");
         else
             switch(choice) {
@@ -83,7 +84,7 @@ int main() {
                     print_rules();
                     break;
                 case 'n':
-                    if((check = connect_server()) != -1) {
+                    if((connect_server()) != -1) {
                         printf("\nConnected to the server");
                         start_game();
                     }

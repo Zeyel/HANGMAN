@@ -26,8 +26,12 @@ int send_letter(char letter) {
     return send(socket_server, &letter, sizeof(char), 0);
 }
 
-char *recieve_name() {
+char *receive_name() {
     char *name;
     recv(socket_server, name, strlen(name), 0);
     return name;
+}
+
+char *receive_options(int i) {
+    return "";
 }

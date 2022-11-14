@@ -25,7 +25,7 @@ typedef struct {
 void state(int n);                                // Return the ASCII Art for the Hangman at different possible state
 int start_game();                                 // Try to reach the server to start a game
 int create_ruleset(char *name, options_t server); // Create a ruleset and send it to the server
-
+void quit_game();
 /////////////////////////////
 
 #endif
