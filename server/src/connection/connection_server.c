@@ -4,12 +4,10 @@
 int server_socket;
 struct sockaddr_in address_server;
 
-
 int send_data(int client, char *buffer, int type)
 {
     send(client, buffer, strlen(buffer), 0);
 }
-
 
 int init_server()
 {
@@ -24,32 +22,35 @@ int init_server()
 
 int connect_client()
 {
-    if (accept(server_socket, NULL, NULL) == -1){
+    int *pclient = malloc(sizeof(int));
+    if ((*pclient = accept(server_socket, NULL, NULL)) == -1)
+    {
         return -1;
     }
     pthread_t thread;
-    int *pclient = malloc(sizeof(int));
-    *pclient = server_socket;
-    return pthread_create(&thread, NULL, &wait_client, pclient);
+    return pthread_create(&thread, NULL, wait_client, pclient);
 }
 
-void *wait_client(void * p_server_socket) {
-    printf("\nSocket pointé: %d", *((int*)p_server_socket));
-    int client_socket = *((int*)p_server_socket);
-    printf("\nInstance locale: %d", client_socket);
-    free(p_server_socket);
-    char *msg = malloc(256);
+void *wait_client(void *p_client_socket)
+{
+    int client_socket = *((int *)p_client_socket);
+    free(p_client_socket);
+    char *msg;
+    msg = malloc(256);
     printf("\nThread successfully created\n");
-    if (recv(client_socket, msg, sizeof msg, 0) == -1) {
-        printf("ERROR recv()\n");
-    } else {
-    printf("\n Client's name : %s \n", msg);
+    if (recv(client_socket, msg, 256, 0) == -1)
+    {
+        perror("ERROR recv()\n");
+    }
+    else
+    {
+        printf("\n Client's name : %s \n", msg);
     }
     return NULL;
 }
 
-int send_rules(int client){
-    
+int send_rules(int client)
+{
 }
 
 int receive_data(int client, char *buffer)

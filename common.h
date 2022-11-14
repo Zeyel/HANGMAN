@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pthread.h>
 
 /*DEFINE SOCKETS*/
 #define CONNECT_PORT 50000

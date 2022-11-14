@@ -11,10 +11,7 @@
 
 /*  INCLUDES */
 #include "game/server_functions.h" // C'est pas une erreur, c'est Windows
-#include <stdbool.h>
-#include <stdio.h>
 #include "connection/connection_server.h"
-#include <pthread.h>
 /////////////////////////////
 
 int main()

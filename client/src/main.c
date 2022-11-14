@@ -9,7 +9,7 @@ int main()
     {
         printf("\nWelcome to the Server\n");
         char *name = malloc(256);
-        name = "Johnny";
+        name = "Thomas";
         if (send_name(name) == -1) {
             printf("ERROR");
         }

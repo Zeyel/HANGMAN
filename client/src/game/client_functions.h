@@ -2,7 +2,7 @@
 #define CLIENT_FUNCTIONS_H
 
 /*INCLUDES*/
-#include "../connection/global_var.h"
+#include "../../../common.h"
 /////////////////////////////
 /*TYPES*/
 typedef enum {
