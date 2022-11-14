@@ -2,8 +2,7 @@
 
 int socket_server;
 
-int connect_server()
-{
+int connect_server() {
     struct sockaddr_in address_server;
     memset(&address_server, 0, sizeof(address_server));
     address_server.sin_family = IPV4;
@@ -13,25 +12,21 @@ int connect_server()
     return (connect(socket_server, (struct sockaddr *)&address_server, sizeof address_server));
 }
 
-int close_connection()
-{
+int close_connection() {
     return (close(socket_server));
 }
 
-int send_name(char *name)
-{
+int send_name(char *name) {
     printf("Your name : %s \n", name);
     printf("Socket : %d \n", socket_server);
     return send(socket_server, name, strlen(name), 0);
 }
 
-int send_letter(char letter)
-{
-    return send(socket_server, &letter, sizeof (char), 0);
+int send_letter(char letter) {
+    return send(socket_server, &letter, sizeof(char), 0);
 }
 
-char *recieve_name()
-{
+char *recieve_name() {
     char *name;
     recv(socket_server, name, strlen(name), 0);
     return name;

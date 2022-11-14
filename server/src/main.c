@@ -10,12 +10,11 @@
 /////////////////////////////
 
 /*  INCLUDES */
-#include "game/server_functions.h" // C'est pas une erreur, c'est Windows
 #include "connection/connection_server.h"
+#include "game/server_functions.h" // C'est pas une erreur, c'est Windows
 /////////////////////////////
 
-int main()
-{
+int main() {
     /* VARIABLES */
     char s[20];
     pthread_t thread;
@@ -23,14 +22,11 @@ int main()
     init_server();
     int c = 0;
     printf("Waiting for clients\n");
-    while (1)
-    {
-        if ((c = connect_client()) != -1)
-        {
+    while(1) {
+        if((c = connect_client()) != -1) {
             printf("Client connected (%d)\n", c);
         }
-        else
-        {
+        else {
             perror("Error when connecting to client\n");
         }
         c = 0;
