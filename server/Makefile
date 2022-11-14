@@ -1,2 +1,7 @@
-all:
-	gcc src/main.c src/game/*.c src/connection/*.c -o server -lpthread
+all: build run
+
+build:
+	@gcc src/main.c src/game/*.c src/connection/*.c ../common.c -o server -lpthread
+
+run:
+	@./server
