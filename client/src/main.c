@@ -10,7 +10,7 @@ int main() {
     do
     {
         printf("\nPlease enter your name :");
-        scanf(" %^[\n]", local_options.name);
+        scanf(" %s^[\n]", local_options.name);
         printf("\nHello %s", local_options.name);
         printf("\n Does the name suits you ?"
                "\n 'y' for yes, 'n' for no : ");
