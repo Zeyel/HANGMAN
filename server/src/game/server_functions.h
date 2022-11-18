@@ -17,7 +17,7 @@ void modify_tries(int nb, options_t *options);            // Set the tries of th
 void word_min(int min, options_t *options);               // Set the minimum length of a word
 void word_max(int max, options_t *options);               // Set the maximum length of a word
 void set_game_type(game_type_t type, options_t *options); // Set the game_type of the game
-int current_state(int n);                                 // Return the current state of the game
+int current_state(int n, options_t *options);                                 // Return the current state of the game
 void *start_game(void *client);
 /////////////////////////////
 #endif

@@ -2,13 +2,13 @@
 #define CONNECTION_SERVER_H
 
 #include "../../../common.h"
-
+#include "../game/server_functions.h"
 //VARIABLES
-
 
 int init_server();
 int connect_client();
-int send_rules(int client);
+int send_options(int client);
 int receive_data(int client, char *buffer);
 void *wait_client(void *p_client_socket);
+options_t *get_options();
 #endif

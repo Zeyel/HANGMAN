@@ -1,8 +1,50 @@
 #include "connection_server.h"
-#include <fcntl.h>
 
 int server_socket;
 struct sockaddr_in address_server;
+options_t game_options;
+
+options_t *get_options() {
+    return &game_options;
+}
+
+void parse_msg(int client, char *msg)
+{
+    int code = 0;
+    char content[MSG_SIZE];
+    sscanf(msg, "%d %s", &code, content);
+    switch (code)
+    {
+    case MSG_QUIT:
+
+        break;
+    case MSG_CHEAT_CODE:
+
+        break;
+    case MSG_START_GAME:
+
+        break;
+    case MSG_OPTIONS:
+
+        break;
+    case MSG_OPTIONS_REQ:
+        strcpy(game_options.name, content);
+        printf("\n Client's name : %s \n", game_options.name);
+        send_options(client);
+        break;
+    case MSG_ADD_WORD:
+
+        break;
+    case MSG_LETTER:
+
+        break;
+    case MSG_WORD:
+
+        break;
+    default:
+        break;
+    }
+}
 
 int send_data(int client, char *buffer, int type)
 {
@@ -44,13 +86,16 @@ void *wait_client(void *p_client_socket)
     }
     else
     {
-        printf("\n Client's name : %s \n", msg);
+        parse_msg(client_socket, msg);
     }
     return NULL;
 }
 
-int send_rules(int client)
+int send_options(int client)
 {
+    char *msg = malloc(MSG_SIZE);
+    sprintf(msg, "%d %s", MSG_OPTIONS, game_options);
+    send(client, msg, MSG_SIZE, 0);
 }
 
 int receive_data(int client, char *buffer)

@@ -7,6 +7,17 @@ int main() {
     char choice_o = 'q';
     options_t local_options;
     init_options(&local_options);
+    do
+    {
+        printf("\nPlease enter your name :");
+        scanf(" %^[\n]", local_options.name);
+        printf("\nHello %s", local_options.name);
+        printf("\n Does the name suits you ?"
+               "\n 'y' for yes, 'n' for no : ");
+        scanf(" %c", &choice);
+    } while (choice != 'y');
+    choice = 'a';
+
     while(choice != 'q' || choice_o != 'q') {
         while(choice != 'q') {
             print_main_menu();

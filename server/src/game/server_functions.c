@@ -2,10 +2,9 @@
 
 /*VARIABLES*/
 
-options_t game_options = {"John Doe", 8, 0, 0, 56, "word_list.txt", 0, vs_server};
 /*FUNCTIONS*/
 void load_rules(int client) {
-    send_rules(client);
+    send_options(client);
 }
 
 int randomizer(int max) {
@@ -59,8 +58,8 @@ void set_game_type(game_type_t type, options_t *options) {
     options->type = type;
 }
 
-int current_state(int n) {
-    return game_options.state;
+int current_state(int n, options_t *options) {
+    return options->state;
 }
 
 void *start_game(void *client) {
