@@ -72,38 +72,45 @@ int receive_options(options_t *options)
     sprintf(msg, "%d %s", MSG_OPTIONS_REQ, options->name);
     send(socket_server, msg, MSG_SIZE, 0);
 
-    do
-    {
+    while (check != 18){
         recv(socket_server, msg, MSG_SIZE, 0);
         sscanf(msg, "%d", &check);
         switch (check)
         {
         case STRCT_NAME:
-            sscanf(msg, "%s", name);
+            sscanf(msg, "%s %d", &check, name);
             options->name = name;
+            break;
         case STRCT_TRIES:
             sscanf(msg, "%d %d", &check, &number);
             options->tries = number;
+            break;
         case STRCT_MIN:
             sscanf(msg, "%d %d", &check, &number);
             options->min = number;
+            break;
         case STRCT_MAX:
             sscanf(msg, "%d %d", &check, &number);
             options->max = number;
+            break;
         case STRCT_STATE:
             sscanf(msg, "%d %d", &check, &number);
             options->state = number;
+            break;
         case STRCT_LIST:
-            sscanf(msg, "%s", name);
+            sscanf(msg, "%d %s", &check, name);
             options->list = name;
+            break;
         case STRCT_TIME:
             sscanf(msg, "%d %d", &check, &number);
             options->time = number;
+            break;
         case STRCT_TYPE:
             sscanf(msg, "%d %d", &check, &number);
             options->type = number;
+            break;
         }
-    } while (check != 18);
+    }
 }
 
 int start_game()

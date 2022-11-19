@@ -94,7 +94,6 @@ int send_options(int client)
     if(send_string(client, STRCT_NAME, game_options.name) == -1) {
         perror("Error when sending name");
     } 
-    printf("Name successfully sent");
     if(send_int(client, STRCT_TRIES, game_options.tries) == -1) {
         perror("Error when sending tries");
     }
@@ -131,7 +130,7 @@ int send_int(int client, int sig, int content) {
     sprintf(msg, "%d %d", sig, content);
     send(client,msg, MSG_SIZE, 0);
 }
-int send_string(int client, int sig, char * content) {
+int send_string(int client, int sig, char *content) {
     char * msg = malloc(MSG_SIZE);
     sprintf(msg, "%d %s", sig, content);
     send(client, msg, MSG_SIZE, 0);
