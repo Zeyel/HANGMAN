@@ -65,6 +65,20 @@ int create_ruleset(char *name, options_t server) {
     return 1;
 } // Create a ruleset and send it to the server
 
+void show_options(options_t options) {
+    printf("\nCurrent options :"
+            "\n Your name : %s"
+            "\n Number of tries : %d"
+            "\n Minimum length of the word : %d"
+            "\n Maximum length of the word : %d"
+            "\n State at the start of the game : %d"
+            "\n Name of the txt list : %s"
+            "\n Timer on the game : %d"
+            "\n Game type : %d", 
+            options.name, options.tries,options.min, options.max,
+            options.state, options.list, options.time, options.type);
+}
+
 void quit_game() {
     printf("\nThank you for playing. Good bye !\n");
     close_connection();

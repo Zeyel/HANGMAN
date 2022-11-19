@@ -35,7 +35,7 @@ int main() {
     printf("Waiting for clients\n");
     while(1) {
         if((c = connect_client()) != -1) {
-            printf("Client connected (%d)\n", c);
+            printf("\nClient connected (%d)\n", c);
         }
         else {
             perror("Error when connecting to client\n");

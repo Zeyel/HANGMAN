@@ -30,7 +30,7 @@ void print_rules() {
            "\n\n");
 }
 
-void print_game_menu(options_t local_options) {
+void print_game_menu() {
     printf("\nGame menu :"
            "\n Press 'g' to start a new game"
            "\n Press 's' to see the current settings"
@@ -40,7 +40,7 @@ void print_game_menu(options_t local_options) {
            "\n\n");
 }
 
-void state(int n) {
+void print_state(int n) {
 
     /*
                   ══╦═══════╗

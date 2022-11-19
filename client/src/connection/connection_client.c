@@ -2,7 +2,8 @@
 
 int socket_server;
 
-void parse_msg(char *msg, options_t *options) {
+void parse_msg(char *msg, options_t *options)
+{
 
     int code = 0;
     char content[MSG_SIZE];
@@ -18,16 +19,7 @@ void parse_msg(char *msg, options_t *options) {
     case MSG_START_GAME:
 
         break;
-    case MSG_OPTIONS:
-        sscanf(content, "%s %d %d %d %d %s %d %d", 
-               options->name,
-               options->tries,
-               options->min,
-               options->max,
-               options->state,
-               options->list,
-               options->time,
-               options->type);
+    case MSG_OPTIONS_RCV:
         break;
     case MSG_OPTIONS_REQ:
         break;
@@ -44,7 +36,6 @@ void parse_msg(char *msg, options_t *options) {
         break;
     }
 }
-
 
 int connect_server()
 {
@@ -76,24 +67,43 @@ int receive_options(options_t *options)
 {
     char *msg = malloc(MSG_SIZE);
     int check;
+    char *name = malloc(MSG_SIZE);
+    int number;
     sprintf(msg, "%d %s", MSG_OPTIONS_REQ, options->name);
     send(socket_server, msg, MSG_SIZE, 0);
-    recv(socket_server, msg, MSG_SIZE, 0);
 
-    printf("DEBUG recieved message : %s\n", msg);
-
-    sscanf(msg, "%d", &check);
-    if (check == MSG_OPTIONS)
+    do
     {
-        
-    }
-    else
-    {
-        printf("Error in the reception of the options");
-        return -1;
-    }
-
-    return 0;
+        recv(socket_server, msg, MSG_SIZE, 0);
+        sscanf(msg, "%d", &check);
+        switch (check)
+        {
+        case STRCT_NAME:
+            sscanf(msg, "%s", name);
+            options->name = name;
+        case STRCT_TRIES:
+            sscanf(msg, "%d %d", &check, &number);
+            options->tries = number;
+        case STRCT_MIN:
+            sscanf(msg, "%d %d", &check, &number);
+            options->min = number;
+        case STRCT_MAX:
+            sscanf(msg, "%d %d", &check, &number);
+            options->max = number;
+        case STRCT_STATE:
+            sscanf(msg, "%d %d", &check, &number);
+            options->state = number;
+        case STRCT_LIST:
+            sscanf(msg, "%s", name);
+            options->list = name;
+        case STRCT_TIME:
+            sscanf(msg, "%d %d", &check, &number);
+            options->time = number;
+        case STRCT_TYPE:
+            sscanf(msg, "%d %d", &check, &number);
+            options->type = number;
+        }
+    } while (check != 18);
 }
 
 int start_game()

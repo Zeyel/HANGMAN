@@ -53,13 +53,13 @@ int main() {
                 }
         }
         while(choice_o != 'q') {
-            print_game_menu(local_options);
+            print_game_menu();
             if(!scanf(" %c", &choice_o))
                 printf("\n\nAn error has occured, let's start again");
             else
                 switch(choice_o) {
                     case 's':
-                        receive_options(&local_options);
+                        show_options(local_options);
                         break;
                     case 'c':
                         if(create_ruleset(local_options.name, local_options) == -1) {
@@ -75,8 +75,10 @@ int main() {
                         break;
                     case 'g':
                         start_game();
+                        break;
                     default:
                         printf("\n\nWrong input");
+                        break;
                 }
         }
     }
