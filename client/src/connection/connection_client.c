@@ -67,8 +67,6 @@ int receive_options(options_t *options)
 {
     char *msg = malloc(MSG_SIZE);
     int check;
-    char *name = malloc(MSG_SIZE);
-    int number;
     sprintf(msg, "%d %s", MSG_OPTIONS_REQ, options->name);
     send(socket_server, msg, MSG_SIZE, 0);
 
@@ -78,36 +76,28 @@ int receive_options(options_t *options)
         switch (check)
         {
         case STRCT_NAME:
-            sscanf(msg, "%s %d", &check, name);
-            options->name = name;
+            sscanf(msg, "%s %d", &check, &options->name);
             break;
         case STRCT_TRIES:
-            sscanf(msg, "%d %d", &check, &number);
-            options->tries = number;
+            sscanf(msg, "%d %d", &check, &options->tries);
             break;
         case STRCT_MIN:
-            sscanf(msg, "%d %d", &check, &number);
-            options->min = number;
+            sscanf(msg, "%d %d", &check, &options->min);
             break;
         case STRCT_MAX:
-            sscanf(msg, "%d %d", &check, &number);
-            options->max = number;
+            sscanf(msg, "%d %d", &check, &options->max);
             break;
         case STRCT_STATE:
-            sscanf(msg, "%d %d", &check, &number);
-            options->state = number;
+            sscanf(msg, "%d %d", &check, &options->state);
             break;
         case STRCT_LIST:
-            sscanf(msg, "%d %s", &check, name);
-            options->list = name;
+            sscanf(msg, "%d %s", &check, options->list);
             break;
         case STRCT_TIME:
-            sscanf(msg, "%d %d", &check, &number);
-            options->time = number;
+            sscanf(msg, "%d %d", &check, &options->time);
             break;
         case STRCT_TYPE:
-            sscanf(msg, "%d %d", &check, &number);
-            options->type = number;
+            sscanf(msg, "%d %d", &check, &options->type);
             break;
         }
     }
