@@ -110,3 +110,10 @@ int start_game()
     sprintf(msg, "%d", MSG_START_GAME);
     send(socket_server, msg, MSG_START_GAME, 0);
 }
+
+int send_string(int sig, char *content)
+{
+    char *msg = malloc(MSG_SIZE);
+    sprintf(msg, "%d %s", sig, content);
+    send(socket_server, msg, MSG_SIZE, 0);
+}

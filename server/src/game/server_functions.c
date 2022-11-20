@@ -11,9 +11,22 @@ int randomizer(int max) {
     return (rand() % max);
 }
 
-int max_size(char table[]);
+int length_list(char *txt) {
+    FILE *word_list;
+    char *nom="/txt/";
+    char c;
+    strcat(nom, txt);
+    if ((word_list = fopen(nom, "r")) != NULL)
+    {
+        int res = 0;
+            for (c = getc(word_list); c != EOF; c = getc(word_list)) {
+                    res++;
+                }
+        return res;
+    }
+}
 
-void add_word(char word[20]) {
+void add_word(char word[MAXWORD]) {
     FILE *list = fopen("src/game/txt/custom_list.txt", "a+");
     fprintf(list, "\n%s", word);
     fclose(list);
@@ -26,8 +39,8 @@ char *load_word(int n, char *txt) {
     if((word_list = fopen(nom, "r")) != NULL) {
         char *result = malloc(MAXWORD);
 
-        for(int i = 0; i < n; i++) {
-            if(i == n - 1) {
+        for(int i = 0; i <= n; i++) {
+            if(i == n) {
                 fscanf(word_list, "%[^\n]", result);
                 return result;
             }
@@ -37,25 +50,9 @@ char *load_word(int n, char *txt) {
         }
     }
     else {
-        return "Defaut";
+        return "Default";
     }
     fclose(word_list);
-}
-
-void modify_tries(int nb, options_t *options) {
-    options->tries = nb;
-}
-
-void word_min(int min, options_t *options) {
-    options->min = min;
-}
-
-void word_max(int max, options_t *options) {
-    options->max = max;
-}
-
-void set_game_type(game_type_t type, options_t *options) {
-    options->type = type;
 }
 
 int current_state(int n, options_t *options) {

@@ -23,7 +23,13 @@ void parse_msg(int client, char *msg)
 
         break;
     case MSG_START_GAME:
-
+        char *word = malloc(MAXWORD);
+        word = load_word(randomizer(length_list(game_options.list)), game_options.list);
+        char[strlen(word)] underscore ;
+        for (int i =0, i< strlen(word), i++) {
+            underscore[i] = "_";
+        }
+        send_string(client, MSG_WORD, underscore[]);
         break;
     case MSG_OPTIONS_RCV:
 
@@ -44,6 +50,9 @@ void parse_msg(int client, char *msg)
     case MSG_WORD:
 
         break;
+    case STRCT_NAME:
+        strcpy(game_options.name, content);
+        printf("\n Client's new name : %s \n", game_options.name);
     default:
         break;
     }
