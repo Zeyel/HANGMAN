@@ -62,8 +62,8 @@ int create_ruleset(char *name, options_t server) {
             custom_rules.time = i_answer;
         }
     } while((c_answer != 'y') && (c_answer != 'n'));
-    return 1;
-} // Create a ruleset and send it to the server
+    
+}
 
 void show_options(options_t options) {
     printf("\nCurrent options :"

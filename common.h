@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #define OK 1
+#define NOK -1
 
 #define MSG_QUIT -1
 #define MSG_CHEAT_CODE 666
