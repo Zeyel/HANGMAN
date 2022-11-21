@@ -69,7 +69,7 @@ int main() {
                     case 'n':
                         printf("\nPlease enter a new nickname :");
                         scanf(" %s", local_options.name);
-                        send_string(STRCT_NAME, local_options.name)
+                        send_string(STRCT_NAME, local_options.name);
                         break;
                     case 'q':
                         choice = 'a';

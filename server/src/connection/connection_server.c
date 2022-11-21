@@ -22,14 +22,16 @@ void parse_msg(int client, char *msg)
     case MSG_CHEAT_CODE:
 
         break;
-    case MSG_START_GAME:
-        char *word = malloc(MAXWORD);
-        word = load_word(randomizer(length_list(game_options.list)), game_options.list);
-        char[strlen(word)] underscore ;
-        for (int i =0, i< strlen(word), i++) {
-            underscore[i] = "_";
+    case MSG_START_GAME: ;
+        char *hangman_word;
+        hangman_word = malloc(256);
+        hangman_word = load_word(randomizer(length_list(game_options.list)), game_options.list);
+        char * underscore;
+        underscore = malloc(256);
+        for (int i =0; i< strlen(hangman_word); i++) {
+            underscore[i] = '_';
         }
-        send_string(client, MSG_WORD, underscore[]);
+        send_string(client, MSG_WORD, underscore);
         break;
     case MSG_OPTIONS_RCV:
 
