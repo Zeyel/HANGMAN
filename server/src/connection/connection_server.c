@@ -11,6 +11,7 @@ options_t *get_options() {
 void parse_msg(int client, char *msg)
 {
     printf ("client after parse : %d", client);
+    printf("sig parsed : %d \nMessage parsed : %s", msg, msg);
     int code = 0;
     char content[MSG_SIZE];
     sscanf(msg, "%d %s", &code, content);
@@ -25,13 +26,19 @@ void parse_msg(int client, char *msg)
     case MSG_START_GAME: ;
         char *hangman_word;
         hangman_word = malloc(256);
-        hangman_word = load_word(randomizer(length_list(game_options.list)), game_options.list);
+        int line = randomizer(length_list(game_options.list));
+        hangman_word = load_word(line, game_options.list);
         char * underscore;
         underscore = malloc(256);
+        printf("J'imagine que le problème vient de là");
         for (int i =0; i< strlen(hangman_word); i++) {
             underscore[i] = '_';
         }
-        send_string(client, MSG_WORD, underscore);
+        // if (send_string(client, MSG_WORD, underscore) == -1) {
+        //     perror("Send_string()");
+        // }
+        printf("The word %s at the %d line has been selected", hangman_word, line);
+        printf("This will be displayed to the client : %s", underscore);
         break;
     case MSG_OPTIONS_RCV:
 
@@ -87,6 +94,7 @@ void *wait_client(void *p_client_socket)
     int client_socket = *((int *)p_client_socket);
     free(p_client_socket);
     char *msg;
+    int shut = 0;
     msg = malloc(256);
     printf("\nThread successfully created\n");
     if (recv(client_socket, msg, 256, 0) == -1)
@@ -95,9 +103,9 @@ void *wait_client(void *p_client_socket)
     }
     else
     {
+
         parse_msg(client_socket, msg);
     }
-    return NULL;
 }
 
 int send_options(int client)
