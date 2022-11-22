@@ -57,21 +57,26 @@ int parse_msg(int client, char *msg)
         break;
     case STRCT_NAME:
         strcpy(game_options.name, content);
-        printf("\n Client's new name : %s \n", game_options.name);
         break;
     case STRCT_TRIES:
-        sscanf(content, "%d", game_options.tries);
+        game_options.tries = atoi(content);
         game_options.state = 64 - game_options.tries;
+        break;
     case STRCT_MIN:
-        sscanf(content, "%d", game_options.min);
+        game_options.min = atoi(content);
+        break;
     case STRCT_MAX:
-        sscanf(content, "%d", game_options.max);
+        game_options.max = atoi(content);
+        break;
     case STRCT_TIME:
-        sscanf(content, "%d", game_options.time);
+        game_options.time = atoi(content);
+        break;
     case STRCT_TYPE:
-        sscanf(content, "%d", game_options.type);
+        game_options.type = atoi(content);
+        break;
     case STRCT_LIST:
-        strcpy(game_options.list, content);
+        strcpy(game_options.name, content);
+        break;
     default:
         printf("Default case encountered");
         break;

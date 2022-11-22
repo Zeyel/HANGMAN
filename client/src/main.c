@@ -60,28 +60,31 @@ int main() {
             else
                 switch(choice_o) {
                     case 's':
-                        show_options(local_options);
-                        break;
-                    case 'c':
-                        if(create_ruleset(local_options.name, local_options) == -1) {
-                            perror("Error trying to reach the server");
+                        if (receive_options(&local_options) == -1)
+                        {perror("Error retrieving options");}
+                            show_options(local_options);
+                            break;
+                        case 'c':
+                            if (create_ruleset(local_options.name, local_options) == -1)
+                            {
+                                perror("Error trying to reach the server");
+                            }
+                            break;
+                        case 'n':
+                            printf("\nPlease enter a new nickname :");
+                            scanf(" %s", local_options.name);
+                            send_string(STRCT_NAME, local_options.name);
+                            break;
+                        case 'q':
+                            choice = 'a';
+                            break;
+                        case 'g':
+                            start_game();
+                            break;
+                        default:
+                            printf("\n\nWrong input");
+                            break;
                         }
-                        break;
-                    case 'n':
-                        printf("\nPlease enter a new nickname :");
-                        scanf(" %s", local_options.name);
-                        send_string(STRCT_NAME, local_options.name);
-                        break;
-                    case 'q':
-                        choice = 'a';
-                        break;
-                    case 'g':
-                        start_game();
-                        break;
-                    default:
-                        printf("\n\nWrong input");
-                        break;
-                }
         }
     }
 }
