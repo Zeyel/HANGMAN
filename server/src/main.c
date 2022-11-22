@@ -30,16 +30,10 @@ int main() {
     strcpy(options->list, "word_list.txt");
     options->time = 0;
     options->type = vs_server;
-
-    int c = 0;
     printf("Waiting for clients\n");
     while(1) {
-        if((c = connect_client()) != -1) {
-            printf("\nClient connected (%d)\n", c);
-        }
-        else {
+        if((connect_client()) == -1) {
             perror("Error when connecting to client\n");
         }
-        c = 0;
     }
 }

@@ -32,7 +32,7 @@
 #define STRCT_TIME 17
 #define STRCT_TYPE 18
 
-#define MSG_SIZE 512
+#define MSG_SIZE 256
 
 #define CONNECT_PORT 50000
 #define IPV4 PF_INET

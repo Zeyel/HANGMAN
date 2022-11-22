@@ -37,10 +37,15 @@ int create_ruleset(char *name, options_t server) {
         }
     } while((c_answer != 'y') && (c_answer != 'n'));
     do {
-        printf("\n\nDo you wish to modify the maximum length of a word ? y/n"
+        if (custom_rules.min <= server.max) {
+         printf("\n\nDo you wish to modify the maximum length of a word ? y/n"
                "\n Current value : %d \n",
                server.max);
         scanf(" %c", &c_answer);
+        } else {
+            printf("\n\nModify the max value to be more than the min value\n");
+            c_answer = 'y';
+        }
         if(c_answer == 'y') {
             do {
                 printf("\nTo which value ? (between 0 and 20 and more than the min): ");
@@ -62,6 +67,10 @@ int create_ruleset(char *name, options_t server) {
             custom_rules.time = i_answer;
         }
     } while((c_answer != 'y') && (c_answer != 'n'));
+    sscanf(txt_answer, "%d", custom_rules.tries);
+    if (send_string(STRCT_TRIES, txt_answer) == -1) {
+        perror("Error sending tries");
+    }
     
 }
 

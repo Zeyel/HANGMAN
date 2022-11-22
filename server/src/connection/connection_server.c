@@ -10,8 +10,8 @@ options_t *get_options() {
 
 int parse_msg(int client, char *msg)
 {
-    printf ("\n\nNew Request\nclient after parse : %d \n", client);
-    printf("sig parsed : %d \nMessage parsed : %s", msg, msg);
+    printf ("\n\nNew Request\nParse_msg()\nclient after parse : %d \n", client);
+    printf("Message parsed : %s\n\n", msg, msg);
     int code = 0;
     char content[MSG_SIZE];
     sscanf(msg, "%d %s", &code, content);
@@ -19,11 +19,11 @@ int parse_msg(int client, char *msg)
     {
     case MSG_QUIT:
 
-        return -1;
+        return NOK;
     case MSG_CHEAT_CODE:
 
         return OK;
-    case MSG_START_GAME: ;
+    case MSG_START_GAME: ; // SEG FAULT HERE
         char *hangman_word;
         hangman_word = malloc(256);
         int line = randomizer(length_list(game_options.list));
@@ -48,22 +48,33 @@ int parse_msg(int client, char *msg)
         if (send_options(client) == -1) {
             perror("Error send_options");
         }
-        return OK;
+                break;
     case MSG_ADD_WORD:
-
-        return OK;
+        break;
     case MSG_LETTER:
-
-        return OK;
+        break;
     case MSG_WORD:
-
-        return OK;
+        break;
     case STRCT_NAME:
         strcpy(game_options.name, content);
         printf("\n Client's new name : %s \n", game_options.name);
+        break;
+    case STRCT_TRIES:
+        sscanf(content, "%d", game_options.tries);
+        game_options.state = 64 - game_options.tries;
+    case STRCT_MIN:
+        sscanf(content, "%d", game_options.min);
+    case STRCT_MAX:
+        sscanf(content, "%d", game_options.max);
+    case STRCT_TIME:
+        sscanf(content, "%d", game_options.time);
+    case STRCT_TYPE:
+        sscanf(content, "%d", game_options.type);
+    case STRCT_LIST:
+        strcpy(game_options.list, content);
     default:
-        printf("There is a useless call");
-        return OK;
+        printf("Default case encountered");
+        break;
     }
 }
 
@@ -91,23 +102,16 @@ int connect_client()
 
 void *wait_client(void *p_client_socket)
 {
-    int game_loop = OK;
     int client_socket = *((int *)p_client_socket);
     free(p_client_socket);
     char *msg;
     msg = malloc(256);
     printf("\nThread successfully created\n");
-    while(game_loop == OK) {
-    if (recv(client_socket, msg, 256, 0) == -1)
+    while(recv(client_socket, msg, 256, 0) != -1)
     {
-        perror("ERROR recv()\n");
-        game_loop = NOK;
+        parse_msg(client_socket, msg);
     }
-    else
-    {
-        game_loop = parse_msg(client_socket, msg);
-    }
-}
+        printf("Thread %d to close", client_socket);
 }
 
 int send_options(int client)

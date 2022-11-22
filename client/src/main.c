@@ -34,6 +34,7 @@ int main() {
                         }
                         else {
                             if(receive_options(&local_options) == -1) {
+                                perror("Error retrieving options");
                                 close_connection();
                             }
                             else {

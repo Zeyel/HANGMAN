@@ -76,7 +76,7 @@ int receive_options(options_t *options)
         switch (check)
         {
         case STRCT_NAME:
-            sscanf(msg, "%s %d", &check, &options->name);
+            sscanf(msg, "%d %s", &check, options->name);
             break;
         case STRCT_TRIES:
             sscanf(msg, "%d %d", &check, &options->tries);
@@ -108,6 +108,7 @@ int start_game()
     char *msg = malloc(MSG_SIZE);
     int check;
     sprintf(msg, "%d", MSG_START_GAME);
+    printf("start_game() message to send: %s", msg);
     send(socket_server, msg, MSG_START_GAME, 0);
 }
 
