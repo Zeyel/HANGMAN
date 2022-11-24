@@ -8,7 +8,7 @@ options_t *get_options() {
     return &game_options;
 }
 
-int parse_msg(int client, char *msg)
+int parse_msg(int client, char *msg, options_t *options_client)
 {
     printf ("\n\nNew Request\nParse_msg()\nclient after parse : %d \n", client);
     printf("Message parsed : %s\n\n", msg, msg);
@@ -19,7 +19,6 @@ int parse_msg(int client, char *msg)
     {
     case MSG_QUIT:
 
-        return NOK;
     case MSG_CHEAT_CODE:
 
         return OK;
@@ -109,12 +108,14 @@ void *wait_client(void *p_client_socket)
 {
     int client_socket = *((int *)p_client_socket);
     free(p_client_socket);
+    options_t options_client;
+    init_options(options_client);
     char *msg;
     msg = malloc(256);
     printf("\nThread successfully created\n");
     while(recv(client_socket, msg, 256, 0) != -1)
     {
-        parse_msg(client_socket, msg);
+        parse_msg(client_socket, msg, &options_client);
     }
         printf("Thread %d to close", client_socket);
 }
