@@ -24,18 +24,16 @@ int parse_msg(int client, char *msg, options_t *options_client) {
             char *hangman_word;
             hangman_word = malloc(256);
             int line = randomizer(length_list(options_client->list));
-            printf("test %d\n", line);
             hangman_word = load_word(line, options_client->list);
-            printf("test %s\n", hangman_word);
             char *underscore;
             underscore = malloc(256);
             for(int i = 0; i < strlen(hangman_word); i++) {
                 underscore[i] = '_';
             }
-            // if (send_string(client, MSG_WORD, underscore) == -1) {
-            //     perror("Send_string()");
-            // }
-            printf("The word %s at the %d line has been selected", hangman_word, line);
+            if(send_string(client, MSG_WORD, underscore) == -1) {
+                perror("Send_string()");
+            }
+            printf("The word %s at the %d line has been selected\n", hangman_word, ++line);
             printf("This will be displayed to the client : %s", underscore);
             return OK;
         case MSG_OPTIONS_RCV:

@@ -9,7 +9,7 @@ int randomizer(int max) {
 
 int length_list(char *txt) {
     FILE *word_list;
-    int res = 1;
+    int res = 0;
     char *nom = malloc(100);
     char c;
     strcpy(nom, "src/game/txt/");
@@ -24,7 +24,6 @@ int length_list(char *txt) {
         perror("Error opening file");
         printf("%s\n", nom);
     }
-    printf("test %d\n", res);
     return res;
 }
 
@@ -44,11 +43,11 @@ char *load_word(int n, char *txt) {
 
         for(int i = 0; i <= n; i++) {
             if(i == n) {
-                fscanf(word_list, "%[^\n]", result);
+                fscanf(word_list, "%s", result);
                 return result;
             }
             else {
-                fscanf(word_list, "%[^\n]", result);
+                fscanf(word_list, "%s", result);
             }
         }
     }
