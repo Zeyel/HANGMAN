@@ -96,14 +96,14 @@ int connect_client(int socket_in) {
 void *wait_client(void *p_client_socket) {
     int client_socket = *((int *)p_client_socket);
     free(p_client_socket);
-    options_t *options_client;
-    init_options(options_client);
+    options_t options_client;
+    init_options(&options_client);
     char *msg;
     msg = malloc(256);
     srand(time(0));
     printf("\nThread successfully created\n");
     while(recv(client_socket, msg, 256, 0) != -1) {
-        parse_msg(client_socket, msg, options_client);
+        parse_msg(client_socket, msg, &options_client);
     }
     printf("Thread %d to close", client_socket);
 }
