@@ -3,9 +3,6 @@
 /*VARIABLES*/
 
 /*FUNCTIONS*/
-void load_rules(int client) {
-    send_options(client);
-}
 
 int randomizer(int max) {
     return (rand() % max);

@@ -8,7 +8,6 @@
 /////////////////////////////
 
 /*FUNCTIONS*/
-void load_rules();                                        // Load a ruleset with a specific name in a specific folder
 int randomizer(int max);                                  // Return a random int between 0 and max, in order to pick a random item from a table
 int length_list(char *);
 

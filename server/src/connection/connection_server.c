@@ -4,13 +4,14 @@ int client_socket;
 struct sockaddr_in address_server;
 options_t game_options;
 
-options_t *get_options() {
+options_t *get_options()
+{
     return &game_options;
 }
 
 int parse_msg(int client, char *msg, options_t *options_client)
 {
-    printf ("\n\nNew Request\nParse_msg()\nclient after parse : %d \n", client);
+    printf("\n\nNew Request\nParse_msg()\nclient after parse : %d \n", client);
     printf("Message parsed : %s\n\n", msg, msg);
     int code = 0;
     char content[MSG_SIZE];
@@ -22,14 +23,15 @@ int parse_msg(int client, char *msg, options_t *options_client)
     case MSG_CHEAT_CODE:
 
         return OK;
-    case MSG_START_GAME: ; // SEG FAULT HERE
+    case MSG_START_GAME:; // SEG FAULT HERE
         char *hangman_word;
         hangman_word = malloc(256);
-        int line = randomizer(length_list(game_options.list));
-        hangman_word = load_word(line, game_options.list);
-        char * underscore;
+        int line = randomizer(length_list(options_client->list));
+        hangman_word = load_word(line, options_client->list);
+        char *underscore;
         underscore = malloc(256);
-        for (int i =0; i< strlen(hangman_word); i++) {
+        for (int i = 0; i < strlen(hangman_word); i++)
+        {
             underscore[i] = '_';
         }
         // if (send_string(client, MSG_WORD, underscore) == -1) {
@@ -42,12 +44,13 @@ int parse_msg(int client, char *msg, options_t *options_client)
 
         break;
     case MSG_OPTIONS_REQ:
-        strcpy(game_options.name, content);
-        printf("\n Client's name : %s \n", game_options.name);
-        if (send_options(client) == -1) {
+        strcpy(options_client->name, content);
+        printf("\n Client's name : %s \n", options_client->name);
+        if (send_options(client, options_client) == -1)
+        {
             perror("Error send_options");
         }
-                break;
+        break;
     case MSG_ADD_WORD:
         break;
     case MSG_LETTER:
@@ -55,26 +58,26 @@ int parse_msg(int client, char *msg, options_t *options_client)
     case MSG_WORD:
         break;
     case STRCT_NAME:
-        strcpy(game_options.name, content);
+        strcpy(options_client->name, content);
         break;
     case STRCT_TRIES:
-        game_options.tries = atoi(content);
-        game_options.state = 64 - game_options.tries;
+        options_client->tries = atoi(content);
+        options_client->state = 64 - options_client->tries;
         break;
     case STRCT_MIN:
-        game_options.min = atoi(content);
+        options_client->min = atoi(content);
         break;
     case STRCT_MAX:
-        game_options.max = atoi(content);
+        options_client->max = atoi(content);
         break;
     case STRCT_TIME:
-        game_options.time = atoi(content);
+        options_client->time = atoi(content);
         break;
     case STRCT_TYPE:
-        game_options.type = atoi(content);
+        options_client->type = atoi(content);
         break;
     case STRCT_LIST:
-        strcpy(game_options.name, content);
+        strcpy(options_client->name, content);
         break;
     default:
         printf("Default case encountered");
@@ -108,61 +111,71 @@ void *wait_client(void *p_client_socket)
 {
     int client_socket = *((int *)p_client_socket);
     free(p_client_socket);
-    options_t options_client;
+    options_t *options_client;
     init_options(options_client);
     char *msg;
     msg = malloc(256);
     printf("\nThread successfully created\n");
-    while(recv(client_socket, msg, 256, 0) != -1)
+    while (recv(client_socket, msg, 256, 0) != -1)
     {
-        parse_msg(client_socket, msg, &options_client);
+        parse_msg(client_socket, msg, options_client);
     }
-        printf("Thread %d to close", client_socket);
+    printf("Thread %d to close", client_socket);
 }
 
-int send_options(int client)
+int send_options(int client, options_t *options_client)
 {
-    if(send_string(client, STRCT_NAME, game_options.name) == -1) {
+    if (send_string(client, STRCT_NAME, options_client->name) == -1)
+    {
         perror("Error when sending name");
-    } 
-    if(send_int(client, STRCT_TRIES, game_options.tries) == -1) {
+    }
+    if (send_int(client, STRCT_TRIES, options_client->tries) == -1)
+    {
         perror("Error when sending tries");
     }
-    if(send_int(client, STRCT_MIN, game_options.min) == -1) {
+    if (send_int(client, STRCT_MIN, options_client->min) == -1)
+    {
         perror("Error when sending min");
     }
-    if(send_int(client, STRCT_MAX, game_options.max) == -1) {
+    if (send_int(client, STRCT_MAX, options_client->max) == -1)
+    {
         perror("Error when sending max");
     }
-    if(send_int(client, STRCT_STATE, game_options.state) == -1) {
+    if (send_int(client, STRCT_STATE, options_client->state) == -1)
+    {
         perror("Error when sending state");
     }
-    if(send_string(client, STRCT_LIST, game_options.list) == -1) {
+    if (send_string(client, STRCT_LIST, options_client->list) == -1)
+    {
         perror("Error when sending list");
     }
-    if(send_int(client, STRCT_TIME, game_options.time) == -1) {
+    if (send_int(client, STRCT_TIME, options_client->time) == -1)
+    {
         perror("Error when sending time");
     }
-    if(send_int(client, STRCT_TYPE, game_options.type) == -1) {
+    if (send_int(client, STRCT_TYPE, options_client->type) == -1)
+    {
         perror("Error when sending type");
     }
-    //EBAUCHE POUR TOUT ENVOYER D'UN COUP
-    // char *msg = malloc(MSG_SIZE);
-    // sprintf(msg, "%d~%d~%s", MSG_OPTIONS_RCV, sizeof game_options, game_options);
-    // printf("Affichage de msg après sprintf : %s",msg);
-    // printf("Avant le send");
-    // if (send(client, msg, MSG_SIZE, 0) == -1) {
-    //     perror("Error send");
-    // }
+    // EBAUCHE POUR TOUT ENVOYER D'UN COUP
+    //  char *msg = malloc(MSG_SIZE);
+    //  sprintf(msg, "%d~%d~%s", MSG_OPTIONS_RCV, sizeof game_options, game_options);
+    //  printf("Affichage de msg après sprintf : %s",msg);
+    //  printf("Avant le send");
+    //  if (send(client, msg, MSG_SIZE, 0) == -1) {
+    //      perror("Error send");
+    //  }
 }
 
-int send_int(int client, int sig, int content) {
-    char * msg= malloc(MSG_SIZE);
+int send_int(int client, int sig, int content)
+{
+    char *msg = malloc(MSG_SIZE);
     sprintf(msg, "%d %d", sig, content);
-    send(client,msg, MSG_SIZE, 0);
+    send(client, msg, MSG_SIZE, 0);
 }
-int send_string(int client, int sig, char *content) {
-    char * msg = malloc(MSG_SIZE);
+int send_string(int client, int sig, char *content)
+{
+    char *msg = malloc(MSG_SIZE);
     sprintf(msg, "%d %s", sig, content);
     send(client, msg, MSG_SIZE, 0);
 }
