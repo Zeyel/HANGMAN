@@ -20,10 +20,9 @@ int parse_msg(int client, char *msg, options_t *options_client) {
         case MSG_CHEAT_CODE:
 
             return OK;
-        case MSG_START_GAME:; // SEG FAULT HERE
-            char *hangman_word;
-            hangman_word = malloc(256);
-            int line = randomizer(length_list(options_client->list));
+        case MSG_START_GAME:;
+            char *hangman_word = malloc(256);
+            int line = randomizer(length_list(options_client->list), options_client);
             hangman_word = load_word(line, options_client->list);
             char *underscore;
             underscore = malloc(256);

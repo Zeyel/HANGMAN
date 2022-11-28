@@ -8,7 +8,7 @@
 /////////////////////////////
 
 /*FUNCTIONS*/
-int randomizer(int max); // Return a random int between 0 and max, in order to pick a random item from a table
+int randomizer(int max, options_t *options); // Return a random int between 0 and max, in order to pick a random item from a table
 int length_list(char *);
 
 void add_word(char *word);                    // Add a word to custom_list.txt

@@ -3,8 +3,16 @@
 
 /*FUNCTIONS*/
 
-int randomizer(int max) {
-    return rand() % max;
+int randomizer(int max, options_t *options) {
+    int res = rand() % max;
+    printf("test %d\n", res);
+    if(options->max) {
+        while(res < options->min || res > options->max) {
+            res = rand() % max;
+            printf("test %d\n", res);
+        }
+    }
+    return res;
 }
 
 int length_list(char *txt) {
@@ -19,10 +27,10 @@ int length_list(char *txt) {
             if(c == '\n')
                 res++;
         }
+        fclose(word_list);
     }
     else {
         perror("Error opening file");
-        printf("%s\n", nom);
     }
     return res;
 }
