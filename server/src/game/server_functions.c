@@ -10,17 +10,22 @@ int randomizer(int max) {
 
 int length_list(char *txt) {
     FILE *word_list;
-    char *nom="/txt/";
+    int res = 1;
+    char *nom = malloc(100);
     char c;
+    strcpy(nom, "src/game/txt/");
     strcat(nom, txt);
-    if ((word_list = fopen(nom, "r")) != NULL)
-    {
-        int res = 0;
-            for (c = getc(word_list); c != EOF; c = getc(word_list)) {
-                    res++;
-                }
-        return res;
+    if((word_list = fopen(nom, "r")) != NULL) {
+        for(c = getc(word_list); c != EOF; c = getc(word_list)) {
+            if(c == '\n')
+                res++;
+        }
     }
+    else {
+        perror("Error opening file");
+        printf("%s\n", nom);
+    }
+    return res;
 }
 
 void add_word(char word[MAXWORD]) {

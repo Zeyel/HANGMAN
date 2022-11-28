@@ -131,7 +131,6 @@ int send_options(int client, options_t *options_client) {
     if(send_int(client, STRCT_STATE, options_client->state) == -1) {
         perror("Error when sending state");
     }
-    printf("%s\n", options_client->name);
     if(send_string(client, STRCT_LIST, options_client->list) == -1) {
         perror("Error when sending list");
     }
