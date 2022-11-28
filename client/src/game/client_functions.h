@@ -8,5 +8,6 @@
 void state(int n);                                // Return the ASCII Art for the Hangman at different possible state
 int create_ruleset(char *name, options_t server); // Create a ruleset and send it to the server
 void quit_game();
+void show_options(options_t options);
 
 #endif

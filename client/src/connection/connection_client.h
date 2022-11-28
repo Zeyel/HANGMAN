@@ -8,6 +8,6 @@ void close_connection();
 int start_game(); // Try to reach the server to start a game
 
 int send_letter(char letter);            // Send a letter to the server, return an int to be sure that the function succeeded
-int receive_options(options_t *options);                        // Recieve the options from the server
+int receive_options(options_t *options); // Recieve the options from the server
 int send_string(int sig, char *content);
 #endif

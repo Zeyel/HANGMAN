@@ -1,8 +1,6 @@
 #include "common.h"
 
 void init_options(options_t *options) {
-    options->name = malloc(100);
-    options->list = malloc(100);
     strcpy(options->name, "John Doe");
     options->tries = 8;
     options->min = 0;
