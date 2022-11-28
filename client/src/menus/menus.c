@@ -40,6 +40,15 @@ void print_game_menu() {
            "\n\n");
 }
 
+void print_game_loop_menu() {
+    printf("\nWhat do you want to do ?"
+            "\n Press 'q' to give up"
+            "\n Press 'l' to guess a letter"
+            "\n Press 'w' to guess the word (/!\\ A mistake makes you lose)"
+            "\n I heard that there was a secret option..."
+            "\n\n");
+}
+
 void print_state(int n) {
 
     /*

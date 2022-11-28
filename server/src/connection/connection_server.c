@@ -10,16 +10,15 @@ int parse_msg(int client, char *msg, options_t *options_client) {
     sscanf(msg, "%d %s", &code, content);
     switch(code) {
         case MSG_QUIT:
-
+            break;
         case MSG_CHEAT_CODE:
-
-            return OK;
+            break;
         case MSG_START_GAME:;
-            char *hangman_word = malloc(256);
+            char *hangman_word = malloc(MSG_SIZE);
             int line = randomizer(length_list(options_client->list), options_client);
             hangman_word = load_word(line, options_client->list);
             char *underscore;
-            underscore = malloc(256);
+            underscore = malloc(MSG_SIZE);
             for(int i = 0; i < strlen(hangman_word); i++) {
                 underscore[i] = '_';
             }
@@ -28,7 +27,8 @@ int parse_msg(int client, char *msg, options_t *options_client) {
             }
             printf("The word %s at the %d line has been selected\n", hangman_word, ++line);
             printf("\nThis will be displayed to the client : %s", underscore);
-            return OK;
+            game_loop(options_client);
+            break;
         case MSG_OPTIONS_RCV:
 
             break;
@@ -102,7 +102,7 @@ void *wait_client(void *p_client_socket) {
     msg = malloc(256);
     srand(time(0));
     printf("\nThread successfully created\n");
-    while(recv(client_socket, msg, 256, 0) != -1) {
+    while(recv(client_socket, msg, MSG_SIZE, 0) != -1) {
         parse_msg(client_socket, msg, &options_client);
     }
     printf("Thread %d to close", client_socket);

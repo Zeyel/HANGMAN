@@ -76,10 +76,15 @@ int main() {
                             send_string(STRCT_NAME, local_options.name);
                             break;
                         case 'q':
+                            //TO DO disconnect
                             choice = 'a';
                             break;
                         case 'g':
-                            start_game();
+                            if (start_game() == -1) {
+                                perror("start_game error :");
+                            } else {
+                                game_loop(&local_options);
+                            }
                             break;
                         default:
                             printf("\n\nWrong input");
