@@ -1,11 +1,10 @@
 #include "server_functions.h"
-
 /*VARIABLES*/
 
 /*FUNCTIONS*/
 
 int randomizer(int max) {
-    return (rand() % max);
+    return rand() % max;
 }
 
 int length_list(char *txt) {
@@ -25,6 +24,7 @@ int length_list(char *txt) {
         perror("Error opening file");
         printf("%s\n", nom);
     }
+    printf("test %d\n", res);
     return res;
 }
 
@@ -36,10 +36,11 @@ void add_word(char word[MAXWORD]) {
 
 char *load_word(int n, char *txt) {
     FILE *word_list;
-    char *nom = "/txt/";
+    char *nom = malloc(100);
+    char *result = malloc(MAXWORD);
+    strcpy(nom, "src/game/txt/");
     strcat(nom, txt);
     if((word_list = fopen(nom, "r")) != NULL) {
-        char *result = malloc(MAXWORD);
 
         for(int i = 0; i <= n; i++) {
             if(i == n) {

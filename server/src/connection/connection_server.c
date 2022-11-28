@@ -1,5 +1,5 @@
 #include "connection_server.h"
-
+#include <time.h>
 int client_socket;
 struct sockaddr_in address_server;
 options_t game_options;
@@ -24,7 +24,9 @@ int parse_msg(int client, char *msg, options_t *options_client) {
             char *hangman_word;
             hangman_word = malloc(256);
             int line = randomizer(length_list(options_client->list));
+            printf("test %d\n", line);
             hangman_word = load_word(line, options_client->list);
+            printf("test %s\n", hangman_word);
             char *underscore;
             underscore = malloc(256);
             for(int i = 0; i < strlen(hangman_word); i++) {
@@ -107,6 +109,7 @@ void *wait_client(void *p_client_socket) {
     printf("%s\n", options_client->name);
     char *msg;
     msg = malloc(256);
+    srand(time(0));
     printf("\nThread successfully created\n");
     while(recv(client_socket, msg, 256, 0) != -1) {
         parse_msg(client_socket, msg, options_client);
