@@ -19,10 +19,10 @@ int main() {
     char s[20];
     pthread_t thread;
     /////////////////////////////
-    init_server();
+    int server_socket = init_server();
     printf("Waiting for clients\n");
     while(1) {
-        if((connect_client()) == -1) {
+        if((connect_client(server_socket)) == -1) {
             perror("Error when connecting to client\n");
         }
     }

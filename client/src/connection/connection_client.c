@@ -100,7 +100,6 @@ int start_game() {
     char *msg = malloc(MSG_SIZE);
     int check;
     sprintf(msg, "%d", MSG_START_GAME);
-    printf("start_game() message to send: %s", msg);
     send(socket_server, msg, MSG_START_GAME, 0);
 }
 

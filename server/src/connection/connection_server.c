@@ -1,12 +1,6 @@
 #include "connection_server.h"
 #include <time.h>
-int client_socket;
 struct sockaddr_in address_server;
-options_t game_options;
-
-options_t *get_options() {
-    return &game_options;
-}
 
 int parse_msg(int client, char *msg, options_t *options_client) {
     printf("\n\nNew Request\nParse_msg()\nclient after parse : %d \n", client);
@@ -33,7 +27,7 @@ int parse_msg(int client, char *msg, options_t *options_client) {
                 perror("Send_string()");
             }
             printf("The word %s at the %d line has been selected\n", hangman_word, ++line);
-            printf("This will be displayed to the client : %s", underscore);
+            printf("\nThis will be displayed to the client : %s", underscore);
             return OK;
         case MSG_OPTIONS_RCV:
 
@@ -80,18 +74,19 @@ int parse_msg(int client, char *msg, options_t *options_client) {
 }
 
 int init_server() {
+    int server_socket = socket(IPV4, TCP, PROTOCOL);
     memset(&address_server, 0, sizeof(address_server));
     address_server.sin_family = IPV4;
     address_server.sin_port = htons(CONNECT_PORT);
     inet_aton("127.0.0.1", &address_server.sin_addr);
-    client_socket = socket(IPV4, TCP, PROTOCOL);
-    bind(client_socket, (struct sockaddr *)&address_server, sizeof address_server);
-    listen(client_socket, SOMAXCONN);
+    bind(server_socket, (struct sockaddr *)&address_server, sizeof address_server);
+    listen(server_socket, SOMAXCONN);
+    return server_socket;
 }
 
-int connect_client() {
+int connect_client(int socket_in) {
     int *pclient = malloc(sizeof(int));
-    if((*pclient = accept(client_socket, NULL, NULL)) == -1) {
+    if((*pclient = accept(socket_in, NULL, NULL)) == -1) {
         return -1;
     }
     pthread_t thread;
@@ -103,7 +98,6 @@ void *wait_client(void *p_client_socket) {
     free(p_client_socket);
     options_t *options_client;
     init_options(options_client);
-    printf("%s\n", options_client->name);
     char *msg;
     msg = malloc(256);
     srand(time(0));
