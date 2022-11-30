@@ -80,11 +80,24 @@ int main() {
                             choice = 'a';
                             break;
                         case 'g':
-                            if (start_game() == -1) {
-                                perror("start_game error :");
-                            } else {
-                                game_loop(&local_options);
+                            do
+                            {
+                                if (start_game() == -1)
+                                {
+                                    perror("start_game error :");
+                                }
+                                else
+                                {
+                                    while (game_loop(&local_options) != -1)
+                                    {
+                                    }
+                                    do {
+                                        printf("Do you want to play again ? y/n ");
+                                        if (!scanf(" %c", &choice_o))
+                                            printf("\n\nAn error has occured, let's start again");
+                                    } while (choice_o != 'y' && choice_o != 'n');
                             }
+                            } while (choice_o == 'y');
                             break;
                         default:
                             printf("\n\nWrong input");

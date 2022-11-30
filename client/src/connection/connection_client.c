@@ -1,53 +1,60 @@
 #include "connection_client.h"
-#include "menus.h"
+#include "../menus/menus.h"
 
 int socket_server;
 
-void parse_msg(int socket_server, char *msg, options_t *options) {
-
+int parse_msg(int socket_server, char *msg, options_t *options) {
     int code = 0;
     char content[MSG_SIZE];
     sscanf(msg, "%d %s", &code, content);
+    printf("recv from server %d %s", code, content);
     switch(code) {
-        case MSG_WORD:
-            char choice = 'x';
-            char letter = 'a';
-            char *word = malloc(MSG_SIZE);
-            print_state(options->state);
-            printf("\nHere is the word to guess : %s \n"
-                   "You have %d chance left", content, options->tries);
-            do {
-              print_game_loop_menu();
-                if (!scanf(" %c", &choice))
-                    perror("\nAn error has occured");  
-            } while (choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c')
-                switch(choice) {
-                    case 'q' :
-                        break;
-                    case 'l' :
-                    do {
-                        printf ("\nWhich letter ? : ");
-                        scanf("%c", &letter);
-                    } while ((letter <= 'a' && letter >= 'z') || (letter <= 'A' && letter >= 'Z'));
-                        send_letter(letter);
-                        options->state--;
-                        options->tries--;
-                        break;
-                    case 'w' :
-                        printf("\nWhich word ? : ");
-                        scanf("%s^[\n]", &word);
-                        send_string(MSG_WORD, &word);
-                        options->state--;
-                        options->tries--;
-                    break;
-                    case 'c' :
-                        printf("ENTERING CHEAT MODE");
-                        send_string(MSG_CHEAT_CODE, "Konami Code");
-                        break;
-                }
+    case MSG_END_GAME:
+        printf("\nYou %s !", content);
+        return -1;
+    case MSG_WORD:;
+        char choice = 'x';
+        char letter = 'a';
+        char *word[MSG_SIZE];
+        print_state(options->state);
+        printf("\nHere is the word to guess : %s \n"
+               "You have %d chance left",
+               content, options->tries);
+        do
+        {
+            print_game_loop_menu();
+            if (!scanf(" %c", &choice))
+                perror("\nAn error has occured");
+        } while (choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c');
+        switch (choice)
+        {
+        case 'q':
+            printf("\nYou gave up\n");
+            send_string(MSG_END_GAME, "gaveup");
             break;
-        default:
+        case 'l':
+            do
+            {
+                printf("\nWhich letter ? : ");
+                scanf(" %c", &letter);
+            } while ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
+            send_letter(MSG_LETTER, letter);
+            options->state++;
+            options->tries--;
             break;
+        case 'w':
+            printf("\nWhich word ? : ");
+            scanf(" %s^[\n]", &word);
+            send_string(MSG_WORD, &word);
+            break;
+        case 'c':
+            printf("\nENTERING CHEAT MODE");
+            send_string(MSG_CHEAT_CODE, "Konami Code");
+            break;
+        }
+        break;
+    default:
+        break;
     }
 }
 
@@ -69,9 +76,9 @@ void close_connection() {
     free(msg);
 }
 
-int send_letter(char letter) {
+int send_letter(int sig, char letter) {
     char *msg = malloc(MSG_SIZE);
-    sprintf(msg, "%d %c", MSG_LETTER, letter);
+    sprintf(msg, "%d %c", sig, letter);
     return send(socket_server, msg, MSG_SIZE, 0);
     free(msg);
 }
@@ -124,10 +131,18 @@ int start_game() {
 
 int game_loop(options_t *options) {
     char *msg;
+    bool give_up = false;
     msg = malloc(256);
-    while (recv(socket_server, msg, MSG_SIZE, 0) != -1) {
-            parse_msg(socket_server, msg, options);
-    }
+    do {
+        if (recv(socket_server, msg, MSG_SIZE, 0) == -1) {
+            perror("recv in game loop");
+        } else {
+            if (parse_msg(socket_server, msg, options)==-1) {
+                give_up = true;
+            }
+        }
+    } while (give_up == false);
+    free(msg);
 }
 
 int send_string(int sig, char *content) {

@@ -4,4 +4,5 @@ void print_main_menu();
 void print_credits();
 void print_rules();
 void print_game_menu();
-void state(int n);
+void print_game_loop_menu();
+void print_state(int n);
