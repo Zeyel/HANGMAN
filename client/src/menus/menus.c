@@ -36,6 +36,7 @@ void print_game_menu() {
            "\n Press 's' to see the current settings"
            "\n Press 'c' to change the settings"
            "\n Press 'n' to change your name"
+           "\n Press 'w' to change your name"
            "\n Press 'q' to go back to the main menu"
            "\n\n");
 }
@@ -47,6 +48,14 @@ void print_game_loop_menu() {
             "\n Press 'w' to guess the word (/!\\ A mistake makes you lose)"
             "\n I heard that there was a secret option..."
             "\n\n");
+}
+
+void print_cheat_mode() {
+    printf("\nSECRET MENU :"
+           "\n Press 'l' to reveal the first unknown letter"
+           "\n Press 'w' to win the game"
+           "\n Press 'i' to increment the remaining tries"
+           "\n\n");
 }
 
 void print_state(int n) {

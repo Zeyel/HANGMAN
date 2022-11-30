@@ -2,7 +2,6 @@
 #define COMMON_H
 
 #include <arpa/inet.h>
-#include <fcntl.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,9 +12,6 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define OK 1
-#define NOK -1
-
 #define MSG_QUIT -1
 #define MSG_CHEAT_CODE 666
 #define MSG_START_GAME 2
@@ -24,7 +20,7 @@
 #define MSG_ADD_WORD 5
 #define MSG_LETTER 6
 #define MSG_WORD 7
-#define MSG_END_GAME 9
+#define MSG_END_GAME 8
 
 #define STRCT_NAME 11
 #define STRCT_TRIES 12
@@ -36,7 +32,7 @@
 #define STRCT_TYPE 18
 
 #define CHEAT_LETTER 20
-#define CHEAT_WORD 21
+#define CHEAT_AUTOWIN 21
 #define CHEAT_INC_LIFE 22
 
 #define MSG_SIZE 256

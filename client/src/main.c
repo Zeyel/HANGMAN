@@ -76,9 +76,15 @@ int main() {
                             send_string(STRCT_NAME, local_options.name);
                             break;
                         case 'q':
-                            //TO DO disconnect
+                            send_quit();
                             choice = 'a';
                             break;
+                        case'w' : ;
+                        char add_word[MSG_SIZE];
+                                printf("\nWhich word do you want to add ?\n");
+                                scanf(" %s", add_word);
+                                send_string(MSG_ADD_WORD, add_word);
+                        break;
                         case 'g':
                             do
                             {
@@ -88,13 +94,11 @@ int main() {
                                 }
                                 else
                                 {
-                                    while (game_loop(&local_options) != -1)
-                                    {
-                                    }
+                                   game_loop(&local_options);
                                     do {
-                                        printf("Do you want to play again ? y/n ");
+                                        printf("\nDo you want to play again ? y/n \n");
                                         if (!scanf(" %c", &choice_o))
-                                            printf("\n\nAn error has occured, let's start again");
+                                            printf("\n\nAn error has occured, let's start again\n");
                                     } while (choice_o != 'y' && choice_o != 'n');
                             }
                             } while (choice_o == 'y');
