@@ -31,7 +31,7 @@ int parse_msg(int client, char *msg, options_t *options_client)
         {
             perror("Send_string()");
         }
-        printf("The word %s at the %d line has been selected\n", hangman_word, ++line);
+        printf("The word %s at the %d line has been selected\n", hangman_word, line);
         printf("\nThis will be displayed to the client : %s\n", underscore);
         do
         {
@@ -41,6 +41,7 @@ int parse_msg(int client, char *msg, options_t *options_client)
             }
         } while (game_loop(client, &tries_local, game_msg, hangman_word, underscore) != -1);
         free(hangman_word);
+        tries_local = options_client->tries;
         return 1;
     case MSG_OPTIONS_REQ:
         strcpy(options_client->name, content);
@@ -73,7 +74,7 @@ int parse_msg(int client, char *msg, options_t *options_client)
         options_client->type = atoi(content);
         break;
     case STRCT_LIST:
-        strcpy(options_client->name, content);
+        strcpy(options_client->list, content);
         break;
     default:
         printf("Default case encountered");

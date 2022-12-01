@@ -36,7 +36,7 @@ void print_game_menu() {
            "\n Press 's' to see the current settings"
            "\n Press 'c' to change the settings"
            "\n Press 'n' to change your name"
-           "\n Press 'w' to change your name"
+           "\n Press 'w' to add a word to the custom list"
            "\n Press 'q' to go back to the main menu"
            "\n\n");
 }
@@ -61,7 +61,7 @@ void print_cheat_mode() {
 void print_state(int n) {
 
     /*
-                  ══╦═══════╗
+                  ══╦═══════╗ ™
                     │       ║
                     O       ║
                    ╒╬╕      ║

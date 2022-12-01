@@ -8,6 +8,7 @@ int create_ruleset(char *name, options_t server) {
     printf("\nChanging rules");
 
     options_t custom_rules;
+    init_options(&custom_rules);
     strcpy(custom_rules.name, name);
     custom_rules.min = server.min;
     do {
@@ -56,60 +57,106 @@ int create_ruleset(char *name, options_t server) {
             custom_rules.max = i_answer;
         }
     } while((c_answer != 'y') && (c_answer != 'n'));
-    do {
-        printf("\n\nDo you wish to modify the time limit ? y/n"
-               "\n Current value : %d \n",
-               server.time);
+    do
+    {
+        printf("\n\nDo you wish to modify the word list used ? y/n"
+               "\n Current value : %s \n",
+               server.list);
         scanf(" %c", &c_answer);
-        if(c_answer == 'y') {
-            do {
-                printf("\nTo which value ? (between 0 and 15 minutes): ");
-                scanf(" %d", &i_answer);
-            } while(i_answer < 0 || i_answer > 15);
-            custom_rules.time = i_answer;
+        if (c_answer == 'y')
+        {
+            do
+            {
+                printf("\n Press 'w' for 'word_list.txt'"
+                       "\n Press 'f' for 'french_list.txt'"
+                       "\n Press 'c' for 'custom_list.txt'"
+                       "\nTo which value ? w / f / c): ");
+                scanf(" %c", &c_answer);
+            } while (c_answer != 'w' && c_answer != 'f' && c_answer != 'c');
+            if (c_answer == 'c')
+                strcpy(custom_rules.list, "custom_list.txt");
+            else if (c_answer == 'f')
+                strcpy(custom_rules.list, "french_list.txt");
+            else
+                strcpy(custom_rules.list, "word_list.txt");
+            c_answer = 'n';
         }
-    } while((c_answer != 'y') && (c_answer != 'n'));
-    if(custom_rules.tries != server.tries) {
-        sprintf(txt_answer, "%d", custom_rules.tries);
-        if(send_string(STRCT_TRIES, txt_answer) == -1) {
-            perror("Error sending tries");
+    } while ((c_answer != 'y') && (c_answer != 'n'));
+            do
+            {
+                printf("\n\nDo you wish to modify the time limit ? y/n"
+                       "\n Current value : %d \n",
+                       server.time);
+                scanf(" %c", &c_answer);
+                if (c_answer == 'y')
+                {
+                    do
+                    {
+                        printf("\nTo which value ? (between 0 and 15 minutes): ");
+                        scanf(" %d", &i_answer);
+                    } while (i_answer < 0 || i_answer > 15);
+                    custom_rules.time = i_answer;
+                }
+            } while ((c_answer != 'y') && (c_answer != 'n'));
+            if (custom_rules.tries != server.tries)
+            {
+                sprintf(txt_answer, "%d", custom_rules.tries);
+                if (send_string(STRCT_TRIES, txt_answer) == -1)
+                {
+                    perror("Error sending tries");
+                }
+            }
+            if (custom_rules.min != server.min)
+            {
+                sprintf(txt_answer, "%d", custom_rules.min);
+                if (send_string(STRCT_MIN, txt_answer) == -1)
+                {
+                    perror("Error sending min");
+                }
+            }
+            if (custom_rules.max != server.max)
+            {
+                sprintf(txt_answer, "%d", custom_rules.max);
+                if (send_string(STRCT_MAX, txt_answer) == -1)
+                {
+                    perror("Error sending max");
+                }
+            }
+            if (custom_rules.time != server.time)
+            {
+                sprintf(txt_answer, "%d", custom_rules.time);
+                if (send_string(STRCT_TIME, txt_answer) == -1)
+                {
+                    perror("Error sending time");
+                }
+            }
+            if (strcmp(custom_rules.list, server.list)) 
+            {
+                sprintf(txt_answer, "%s", &custom_rules.list);
+                if(send_string(STRCT_LIST, txt_answer ) == -1)
+                {
+                    perror("Error sending list");
+                }
+            }
         }
-    }
-    if(custom_rules.min != server.min) {
-        sprintf(txt_answer, "%d", custom_rules.min);
-        if(send_string(STRCT_MIN, txt_answer) == -1) {
-            perror("Error sending min");
-        }
-    }
-    if(custom_rules.max != server.max) {
-        sprintf(txt_answer, "%d", custom_rules.max);
-        if(send_string(STRCT_MAX, txt_answer) == -1) {
-            perror("Error sending max");
-        }
-    }
-    if(custom_rules.time != server.time) {
-        sprintf(txt_answer, "%d", custom_rules.time);
-        if(send_string(STRCT_TIME, txt_answer) == -1) {
-            perror("Error sending time");
-        }
-    }
-}
 
-void show_options(options_t options) {
-    printf("\nCurrent options :"
-           "\n Your name : %s"
-           "\n Number of tries : %d"
-           "\n Minimum length of the word : %d"
-           "\n Maximum length of the word : %d"
-           "\n State at the start of the game : %d"
-           "\n Name of the txt list : %s"
-           "\n Timer on the game : %d"
-           "\n Game type : %d",
-           options.name, options.tries, options.min, options.max,
-           options.state, options.list, options.time, options.type);
-}
+        void show_options(options_t options)
+        {
+            printf("\nCurrent options :"
+                   "\n Your name : %s"
+                   "\n Number of tries : %d"
+                   "\n Minimum length of the word : %d"
+                   "\n Maximum length of the word : %d"
+                   "\n State at the start of the game : %d"
+                   "\n Name of the txt list : %s"
+                   "\n Timer on the game : %d"
+                   "\n Game type : %d",
+                   options.name, options.tries, options.min, options.max,
+                   options.state, options.list, options.time, options.type);
+        }
 
-void quit_game() {
-    printf("\nThank you for playing. Good bye !\n");
-    close_connection();
-}
+        void quit_game()
+        {
+            printf("\nThank you for playing. Good bye !\n");
+            close_connection();
+        }

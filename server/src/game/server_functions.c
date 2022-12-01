@@ -50,7 +50,7 @@ char *load_word(int n, char *txt) {
     if((word_list = fopen(nom, "r")) != NULL) {
 
         for(int i = 0; i <= n; i++) {
-            if(i == n-1) {
+            if(i == n-1 || i == n) {
                 fscanf(word_list, "%s", result);
                 return result;
             }
