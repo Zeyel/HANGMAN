@@ -19,6 +19,7 @@ int parse_msg(int client, char *msg, options_t *options_client)
         char *hangman_word = malloc(MSG_SIZE);
         char underscore[MSG_SIZE];
         int tries_local = options_client->tries;
+        int timer_local;
         int line = randomizer(length_list(options_client->list), options_client);
         hangman_word = load_word(line, options_client->list);
         for (int i = 0; i < strlen(hangman_word); i++)
@@ -33,13 +34,19 @@ int parse_msg(int client, char *msg, options_t *options_client)
         }
         printf("The word %s at the %d line has been selected\n", hangman_word, line);
         printf("\nThis will be displayed to the client : %s\n", underscore);
+        if(!(options_client->time == 0)) {
+            timer_local = time(NULL) + 60 * options_client->time;
+            printf("Timer set to %d", timer_local);
+        } else {
+            timer_local = 0;
+        }
         do
         {
             if (recv(client, game_msg, MSG_SIZE, 0) == -1)
             {
                 perror("recv in game start");
             }
-        } while (game_loop(client, &tries_local, game_msg, hangman_word, underscore) != -1);
+        } while (game_loop(client, &tries_local, &timer_local, game_msg, hangman_word, underscore) != -1);
         free(hangman_word);
         tries_local = options_client->tries;
         return 1;
@@ -130,146 +137,143 @@ void *wait_client(void *p_client_socket)
     printf("Thread %d to close", client_socket);
 }
 
-int game_loop(int client, int *tries, char *msg, char *word, char *underscore)
+int game_loop(int client, int *tries, int *timer, char *msg, char *word, char *underscore)
 {
-    int initial_tries;
     printf("\n\nNew game request \n\n from client : %d \n", client);
     printf("Message parsed : %s\n\n", msg, msg);
     int code = 0;
     bool non_full = false;
     char *content = malloc(MSG_SIZE);
     sscanf(msg, "%d %s", &code, content);
-    switch (code)
-    {
-    case MSG_LETTER:;
-        char c[20] = "";
-        strcpy(c, word);
-
-        for (int i = 0; i <= strlen(word); i++)
-        {
-            if (tolower(c[i]) == tolower(content[0]))
-            {
-                underscore[i] = tolower(content[0]);
-                printf("\n %c is in the word at position %d !", content[0], i + 1);
-            }
-            else if (underscore[i] == '_')
-            {
-                non_full = true;
-            }
-        }
-        *tries -= 1;
-        if (*tries == 0)
-        {
-            send_string(client, MSG_END_GAME, "lost");
-            return -1;
-        }
-        else if (non_full == false)
-        {
-            send_string(client, MSG_END_GAME, "won");
-            return -1;
-        }
-        else if (send_string(client, MSG_WORD, underscore) == -1)
-        {
-            perror("Send_string()");
-        }
-        else
-        {
-            printf("\nThis will be displayed to the client : %s", underscore);
-        }
-        break;
-    case MSG_WORD:
-        printf("\nentering this case");
-        for (int i = 0; i < strlen(content); i++)
-        {
-            content[i] = tolower(content[i]);
-        }
-        if (strcmp(content, word) == 0)
-        {
-            printf("\nThe client found the word");
-            send_string(client, MSG_END_GAME, "won");
-            return -1;
-        }
-        else
-        {
-            printf("\nThe client sent a wrong word");
-            send_string(client, MSG_END_GAME, "lost");
-            return -1;
-        }
-        break;
-    case MSG_END_GAME:
-        send_string(client, MSG_END_GAME, "lost");
-        return -1;
-    case MSG_CHEAT_CODE:;
-        char cheat_msg[MSG_SIZE];
-        int code;
-        if (recv(client, cheat_msg, MSG_SIZE, 0) == -1)
-        {
-            perror("Error cheat message:");
-        }
-        sscanf(cheat_msg, "%d", &code);
+    if (*timer == 0 || *timer >= time(NULL)) {
+        printf("\nTime remaining : %d s\n", *timer - time(NULL));
         switch (code)
         {
-        case CHEAT_AUTOWIN:
-            send_string(client, MSG_END_GAME, "won");
-            return 1;
-        case CHEAT_LETTER:;
-            char l = '\0';
-            int i;
-            for (i = 0; !l && i < strlen(underscore); i++)
+        case MSG_LETTER:;
+            char c[20] = "";
+            strcpy(c, word);
+
+            for (int i = 0; i <= strlen(word); i++)
             {
-                if (underscore[i] == '_')
+                if (tolower(c[i]) == tolower(content[0]))
                 {
-                    l = word[i];
-                    underscore[i] = tolower(l);
-                }
-            }
-            while (i < strlen(underscore))
-            {
-                if (tolower(word[i]) == tolower(l))
-                {
-                    underscore[i] = tolower(l);
+                    underscore[i] = tolower(content[0]);
                     printf("\n %c is in the word at position %d !", content[0], i + 1);
                 }
                 else if (underscore[i] == '_')
                 {
                     non_full = true;
                 }
-                i++;
             }
-            if (non_full == false)
+            *tries -= 1;
+            if (*tries == 0)
             {
+                send_string(client, MSG_END_GAME, "lost");
+                return -1;
+            }
+            else if (non_full == false)
+            {
+                send_string(client, MSG_END_GAME, "won");
+                return -1;
+            }
+            else if (send_string(client, MSG_WORD, underscore) == -1)
+            {
+                perror("Send_string()");
+            }
+            else
+            {
+                printf("\nThis will be displayed to the client : %s", underscore);
+            }
+            break;
+        case MSG_WORD:
+            printf("\nentering this case");
+            for (int i = 0; i < strlen(content); i++)
+            {
+                content[i] = tolower(content[i]);
+            }
+            if (strcmp(content, word) == 0)
+            {
+                printf("\nThe client found the word");
                 send_string(client, MSG_END_GAME, "won");
                 return -1;
             }
             else
             {
+                printf("\nThe client sent a wrong word");
+                send_string(client, MSG_END_GAME, "lost");
+                return -1;
+            }
+            break;
+        case MSG_END_GAME:
+            send_string(client, MSG_END_GAME, "lost");
+            return -1;
+        case MSG_CHEAT_CODE:;
+            char cheat_msg[MSG_SIZE];
+            int code;
+            if (recv(client, cheat_msg, MSG_SIZE, 0) == -1)
+            {
+                perror("Error cheat message:");
+            }
+            sscanf(cheat_msg, "%d", &code);
+            switch (code)
+            {
+            case CHEAT_AUTOWIN:
+                send_string(client, MSG_END_GAME, "won");
+                return 1;
+            case CHEAT_LETTER:;
+                char l = '\0';
+                int i;
+                for (i = 0; !l && i < strlen(underscore); i++)
+                {
+                    if (underscore[i] == '_')
+                    {
+                        l = word[i];
+                        underscore[i] = tolower(l);
+                    }
+                }
+                while (i < strlen(underscore))
+                {
+                    if (tolower(word[i]) == tolower(l))
+                    {
+                        underscore[i] = tolower(l);
+                        printf("\n %c is in the word at position %d !", content[0], i + 1);
+                    }
+                    else if (underscore[i] == '_')
+                    {
+                        non_full = true;
+                    }
+                    i++;
+                }
+                if (non_full == false)
+                {
+                    send_string(client, MSG_END_GAME, "won");
+                    return -1;
+                }
+                else
+                {
+                    if (send_string(client, MSG_WORD, underscore) == -1)
+                    {
+                        perror("Send_string()");
+                    }
+                }
+                break;
+            case CHEAT_INC_LIFE:
+                *tries++;
                 if (send_string(client, MSG_WORD, underscore) == -1)
                 {
                     perror("Send_string()");
                 }
-            }
-            break;
-        case CHEAT_INC_LIFE:
-            *tries++;
-            if (send_string(client, MSG_WORD, underscore) == -1)
-            {
-                perror("Send_string()");
+                break;
+            default:
+                break;
             }
             break;
         default:
             break;
-        }
-        if (content == "Konami Code")
-        {
-            printf("\nclient entering cheat mode");
-        }
-        else
-        {
-            printf("\ntrying entering cheat mode with wrong token");
-        }
-        break;
-    default:
-        break;
+    }
+    } else {
+
+        send_string(client, MSG_END_GAME, "lost_due_to_the_timer");
     }
 }
 
