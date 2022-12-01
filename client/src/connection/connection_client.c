@@ -1,5 +1,6 @@
 #include "connection_client.h"
 #include "../menus/menus.h"
+#include "../game/client_functions.h"
 
 int socket_server;
 
@@ -42,8 +43,10 @@ int parse_msg(int socket_server, char *msg, options_t *options) {
             options->tries--;
             break;
         case 'w':
+        do {
             printf("\nWhich word ? : ");
             scanf(" %s^[\n]", word);
+        } while(check_string_char(word) == -1);
             send_string(MSG_WORD, word);
             break;
         case 'c':

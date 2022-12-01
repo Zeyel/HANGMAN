@@ -81,8 +81,10 @@ int main() {
                             break;
                         case'w' : ;
                         char add_word[MSG_SIZE];
+                        do {
                                 printf("\nWhich word do you want to add ?\n");
                                 scanf(" %s", add_word);
+                        } while (check_string_char(add_word) == -1);
                                 send_string(MSG_ADD_WORD, add_word);
                         break;
                         case 'g':
