@@ -1,5 +1,6 @@
 #include "common.h"
 
+// Initializing the options because it has char and default options*
 void init_options(options_t *options) {
     strcpy(options->name, "John Doe");
     options->tries = 14;
