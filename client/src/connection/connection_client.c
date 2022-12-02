@@ -4,6 +4,83 @@
 
 int socket_server;
 
+int cheat_mode(int *tries, int *state) {
+    char letter;
+    printf("\nENTERING CHEAT MODE");
+    send_string(MSG_CHEAT_CODE, "Konami Code");
+    do
+    {
+        print_cheat_mode();
+        printf("\nWhich letter ? : ");
+        scanf(" %c", &letter);
+    } while (letter != 'l' && letter != 'i' && letter != 'w');
+    switch (letter)
+    {
+    case 'w':
+        send_string(CHEAT_AUTOWIN, "");
+        break;
+    case 'l':
+        send_string(CHEAT_LETTER, "");
+        break;
+    case 'i':
+        *tries++;
+        *state--;
+        send_string(CHEAT_INC_LIFE, "");
+        break;
+    }
+}
+
+int game_loop_menu(int *tries, int *state) {
+    char choice = 'x';
+    char letter = 'a';
+    char word[MSG_SIZE];
+    do
+    {
+        print_game_loop_menu();
+        if (!scanf(" %c", &choice))
+            perror("\nAn error has occured");
+    } while (choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c');
+    switch (choice)
+    {
+    case 'q':
+        printf("\nYou gave up\n");
+        send_string(MSG_END_GAME, "gaveup");
+        return -1;
+    case 'l':
+        do
+        {
+            printf("\nWhich letter ? : ");
+            scanf(" %c", &letter);
+        } while ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
+        send_letter(MSG_LETTER, letter);
+        *state++;
+        *tries--;
+        break;
+    case 'w':
+        do
+        {
+            printf("\nWhich word ? : ");
+            scanf(" %s^[\n]", word);
+        } while (check_string_char(word) == -1);
+        send_string(MSG_WORD, word);
+        break;
+    case 'c':
+        cheat_mode(tries, state);
+        break;
+    }
+}
+
+int msg_word(options_t * options, char * content) {
+    int local_tries = options->tries;
+    int local_state = options->state;
+    print_state(options->state);
+    printf("\nHere is the word to guess : %s \n"
+           "You have %d chance left",
+           content, options->tries);
+    if (game_loop_menu(&local_tries, &local_state) == -1)
+    return -1;
+}
+
 int parse_msg(int socket_server, char *msg, options_t *options) {
     int code = 0;
     char content[MSG_SIZE];
@@ -12,66 +89,8 @@ int parse_msg(int socket_server, char *msg, options_t *options) {
     case MSG_END_GAME:
         printf("\nYou %s !\n", content);
         return -1;
-    case MSG_WORD:;
-        char choice = 'x';
-        char letter = 'a';
-        char word[MSG_SIZE];
-        print_state(options->state);
-        printf("\nHere is the word to guess : %s \n"
-               "You have %d chance left",
-               content, options->tries);
-        do
-        {
-            print_game_loop_menu();
-            if (!scanf(" %c", &choice))
-                perror("\nAn error has occured");
-        } while (choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c');
-        switch (choice)
-        {
-        case 'q':
-            printf("\nYou gave up\n");
-            send_string(MSG_END_GAME, "gaveup");
-            break;
-        case 'l':
-            do
-            {
-                printf("\nWhich letter ? : ");
-                scanf(" %c", &letter);
-            } while ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
-            send_letter(MSG_LETTER, letter);
-            options->state++;
-            options->tries--;
-            break;
-        case 'w':
-        do {
-            printf("\nWhich word ? : ");
-            scanf(" %s^[\n]", word);
-        } while(check_string_char(word) == -1);
-            send_string(MSG_WORD, word);
-            break;
-        case 'c':
-            printf("\nENTERING CHEAT MODE");
-            send_string(MSG_CHEAT_CODE, "Konami Code");
-            do
-            {
-                print_cheat_mode();
-                printf("\nWhich letter ? : ");
-                scanf(" %c", &letter);
-            } while (letter != 'l' && letter != 'i' && letter != 'w');
-            switch (letter) {
-                case 'w' :
-                    send_string(CHEAT_AUTOWIN, "");
-                    break;
-                case 'l':
-                    send_string(CHEAT_LETTER, "");
-                    break;
-                case 'i':
-                    options->tries++;
-                    send_string(CHEAT_INC_LIFE, "");
-                    break;
-            }
-            break;
-        }
+    case MSG_WORD:
+        msg_word(options, content);
         break;
     default:
         break;
@@ -161,8 +180,8 @@ int game_loop(options_t *options) {
                 give_up = true;
             }
         }
+        free(msg);
     } while (give_up == false);
-    free(msg);
     return -1;
 }
 

@@ -38,10 +38,14 @@ int parse_msg(int client, char *msg, options_t *options_client)
         }
         printf("The word %s at the %d line has been selected\n", hangman_word, line);
         printf("\nThis will be displayed to the client : %s\n", underscore);
-        if(!(options_client->time == 0)) {
+        printf(" %d chances remaining", tries_local);
+        if (!(options_client->time >= 0))
+        {
             timer_local = time(NULL) + 60 * options_client->time;
             printf("Timer set to %d", timer_local);
-        } else {
+        }
+        else
+        {
             timer_local = 0;
         }
         do
@@ -53,7 +57,7 @@ int parse_msg(int client, char *msg, options_t *options_client)
         } while (game_loop(client, &tries_local, &timer_local, game_msg, hangman_word, underscore) != -1);
         free(hangman_word);
         tries_local = options_client->tries;
-        return 1;
+        break;
     case MSG_OPTIONS_REQ:
         strcpy(options_client->name, content);
         printf("Client's name : %s\n", options_client->name);
@@ -125,8 +129,8 @@ int connect_client(int socket_in) // connect the client from socket_in and creat
 
 void *wait_client(void *p_client_socket) // Waiting for instructions after the thread creation
 {
-    int client_socket = *((int *)p_client_socket);  
-    free(p_client_socket);  // free the socket from the main to allow multiple connections
+    int client_socket = *((int *)p_client_socket);
+    free(p_client_socket); // free the socket from the main to allow multiple connections
     options_t options_client;
     init_options(&options_client);
     char *msg;
@@ -141,7 +145,7 @@ void *wait_client(void *p_client_socket) // Waiting for instructions after the t
     printf("Thread %d to close", client_socket);
 }
 
-int msg_letter(int client, char *msg, char *word, char *underscore, int* tries, char* content)
+int msg_letter(int client, char *msg, char *word, char *underscore, int *tries, char *content)
 {
     bool non_full = false;
     char c[20] = "";
@@ -165,8 +169,9 @@ int msg_letter(int client, char *msg, char *word, char *underscore, int* tries, 
         send_string(client, MSG_END_GAME, "won");
         return -1;
     }
-     else if (*tries == 0)
+    else if (*tries == 0)
     {
+        printf("No lives left");
         send_string(client, MSG_END_GAME, "lost");
         return -1;
     }
@@ -180,7 +185,8 @@ int msg_letter(int client, char *msg, char *word, char *underscore, int* tries, 
     }
 }
 
-int msg_word(int client, char *word, char *content) {
+int msg_word(int client, char *word, char *content)
+{
     for (int i = 0; i < strlen(content); i++)
     {
         content[i] = tolower(content[i]);
@@ -199,7 +205,8 @@ int msg_word(int client, char *word, char *content) {
     }
 }
 
-int cheat_letter(int client, char *word, char *underscore) {
+int cheat_letter(int client, char *word, char *underscore)
+{
     bool non_full = false;
     char l = '\0';
     int i;
@@ -238,22 +245,23 @@ int cheat_letter(int client, char *word, char *underscore) {
     }
 }
 
-int msg_cheat_code(int client, char *word, char *underscore, int *tries) {
+int msg_cheat_code(int client, char *word, char *underscore, int *tries)
+{
     char cheat_msg[MSG_SIZE];
     int code;
     if (recv(client, cheat_msg, MSG_SIZE, 0) == -1)
         perror("Error cheat message:");
-    sscanf(cheat_msg, "%d", &code);
+    sscanf(cheat_msg, " %d", &code);
     switch (code)
     {
     case CHEAT_AUTOWIN:
         send_string(client, MSG_END_GAME, "won");
         return -1;
     case CHEAT_LETTER:
-        if(cheat_letter(client, word, underscore) == -1)
-        return -1;
+        if (cheat_letter(client, word, underscore) == -1)
+            return -1;
         else
-        break;
+            break;
     case CHEAT_INC_LIFE:
         *tries++;
         if (send_string(client, MSG_WORD, underscore) == -1)
@@ -273,30 +281,35 @@ int game_loop(int client, int *tries, int *timer, char *msg, char *word, char *u
     int code = 0;
     char *content = malloc(MSG_SIZE);
     sscanf(msg, "%d %s", &code, content);
-    if (*timer == 0 || *timer >= time(NULL)) {
-        printf("\nTime remaining : %d s\n", *timer - time(NULL));
+    if (*timer == 0 || *timer >= time(NULL))
+    {
+        if (*timer > 0)
+            printf("\nTime remaining : %d s\n", *timer - time(NULL));
         switch (code)
         {
         case MSG_LETTER:
             if (msg_letter(client, msg, word, underscore, tries, content) == -1)
-            return-1;
+                return -1;
             else
-            break;
+                break;
         case MSG_WORD:
             msg_word(client, word, content);
             return -1;
         case MSG_END_GAME:
+            printf("Client gave up");
             send_string(client, MSG_END_GAME, "lost");
             return -1;
         case MSG_CHEAT_CODE:
             if (msg_cheat_code(client, word, underscore, tries) == -1)
-            return -1;
+                return -1;
             else
-            break;
+                break;
         default:
             break;
+        }
     }
-    } else {
+    else
+    {
 
         send_string(client, MSG_END_GAME, "lost_due_to_the_timer");
     }
