@@ -12,4 +12,5 @@ int receive_options(options_t *options); // Recieve the options from the server
 int send_string(int sig, char *content);
 int parse_msg(int socket_server, char *msg, options_t *options);
 void send_quit();
+
 #endif

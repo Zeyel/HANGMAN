@@ -16,7 +16,7 @@ int randomizer(int max, options_t *options) {
 int length_list(char *txt) {
     FILE *word_list;
     int res = 0;
-    char *nom = malloc(100);
+    char nom[100];
     char c;
     strcpy(nom, "src/game/txt/");
     strcat(nom, txt);
@@ -41,8 +41,8 @@ void add_word(char word[MAXWORD]) {
 
 char *load_word(int n, char *txt) {
     FILE *word_list;
-    char *nom = malloc(100);
-    char *result = malloc(MAXWORD);
+    char nom[100];
+    char * result = malloc(MAXWORD);
     strcpy(nom, "src/game/txt/");
     strcat(nom, txt);
     if((word_list = fopen(nom, "r")) != NULL) {

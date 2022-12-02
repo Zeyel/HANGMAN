@@ -20,12 +20,12 @@ int parse_msg(int client, char *msg, options_t *options_client)
         return -1;
     case MSG_START_GAME:;
         char game_msg[MSG_SIZE];
-        char *hangman_word = malloc(MSG_SIZE);
+        char hangman_word[MSG_SIZE];
         char underscore[MSG_SIZE];
         int tries_local = options_client->tries;
         int timer_local;
         int line = randomizer(length_list(options_client->list), options_client);
-        hangman_word = load_word(line, options_client->list);
+        strcpy(hangman_word, load_word(line, options_client->list));
         for (int i = 0; i < strlen(hangman_word); i++)
         {
             underscore[i] = '_';
@@ -41,7 +41,7 @@ int parse_msg(int client, char *msg, options_t *options_client)
         printf(" %d chances remaining", tries_local);
         if (!(options_client->time >= 0))
         {
-            timer_local = time(NULL) + 60 * options_client->time;
+            timer_local = time(NULL);
             printf("Timer set to %d", timer_local);
         }
         else
@@ -54,8 +54,7 @@ int parse_msg(int client, char *msg, options_t *options_client)
             {
                 perror("recv in game start");
             }
-        } while (game_loop(client, &tries_local, &timer_local, game_msg, hangman_word, underscore) != -1);
-        free(hangman_word);
+        } while (game_loop(client, &tries_local, &timer_local, options_client->time, game_msg, hangman_word, underscore) != -1);
         tries_local = options_client->tries;
         break;
     case MSG_OPTIONS_REQ:
@@ -133,8 +132,7 @@ void *wait_client(void *p_client_socket) // Waiting for instructions after the t
     free(p_client_socket); // free the socket from the main to allow multiple connections
     options_t options_client;
     init_options(&options_client);
-    char *msg;
-    msg = malloc(256);
+    char msg[MSG_SIZE];
     srand(time(0));
     printf("\nThread successfully created\n");
     do
@@ -142,7 +140,7 @@ void *wait_client(void *p_client_socket) // Waiting for instructions after the t
         if (recv(client_socket, msg, MSG_SIZE, 0) == -1)
             perror("Error when receiving a message:");
     } while (parse_msg(client_socket, msg, &options_client) != -1);
-    printf("Thread %d to close", client_socket);
+    printf("Thread %d to close\n", client_socket);
 }
 
 int msg_letter(int client, char *msg, char *word, char *underscore, int *tries, char *content)
@@ -274,14 +272,14 @@ int msg_cheat_code(int client, char *word, char *underscore, int *tries)
     }
 }
 
-int game_loop(int client, int *tries, int *timer, char *msg, char *word, char *underscore)
+int game_loop(int client, int *tries, int *timer, int options_timer, char *msg, char *word, char *underscore)
 {
     printf("\n\nNew game request \n\n from client : %d \n", client);
     printf("Message parsed : %s\n\n", msg, msg);
     int code = 0;
-    char *content = malloc(MSG_SIZE);
+    char content[MSG_SIZE];
     sscanf(msg, "%d %s", &code, content);
-    if (*timer == 0 || *timer >= time(NULL))
+    if (*timer == 0 || *timer + 60 * options_timer >= time(NULL))
     {
         if (*timer > 0)
             printf("\nTime remaining : %d s\n", *timer - time(NULL));
@@ -338,14 +336,14 @@ int send_options(int client, options_t *options_client)
 
 int send_int(int client, int sig, int content)
 {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     sprintf(msg, "%d %d", sig, content);
     send(client, msg, MSG_SIZE, 0);
 }
 
 int send_string(int client, int sig, char *content)
 {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     sprintf(msg, "%d %s", sig, content);
     send(client, msg, MSG_SIZE, 0);
 }

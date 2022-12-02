@@ -4,83 +4,6 @@
 
 int socket_server;
 
-int cheat_mode(int *tries, int *state) {
-    char letter;
-    printf("\nENTERING CHEAT MODE");
-    send_string(MSG_CHEAT_CODE, "Konami Code");
-    do
-    {
-        print_cheat_mode();
-        printf("\nWhich letter ? : ");
-        scanf(" %c", &letter);
-    } while (letter != 'l' && letter != 'i' && letter != 'w');
-    switch (letter)
-    {
-    case 'w':
-        send_string(CHEAT_AUTOWIN, "");
-        break;
-    case 'l':
-        send_string(CHEAT_LETTER, "");
-        break;
-    case 'i':
-        *tries++;
-        *state--;
-        send_string(CHEAT_INC_LIFE, "");
-        break;
-    }
-}
-
-int game_loop_menu(int *tries, int *state) {
-    char choice = 'x';
-    char letter = 'a';
-    char word[MSG_SIZE];
-    do
-    {
-        print_game_loop_menu();
-        if (!scanf(" %c", &choice))
-            perror("\nAn error has occured");
-    } while (choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c');
-    switch (choice)
-    {
-    case 'q':
-        printf("\nYou gave up\n");
-        send_string(MSG_END_GAME, "gaveup");
-        return -1;
-    case 'l':
-        do
-        {
-            printf("\nWhich letter ? : ");
-            scanf(" %c", &letter);
-        } while ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
-        send_letter(MSG_LETTER, letter);
-        *state++;
-        *tries--;
-        break;
-    case 'w':
-        do
-        {
-            printf("\nWhich word ? : ");
-            scanf(" %s^[\n]", word);
-        } while (check_string_char(word) == -1);
-        send_string(MSG_WORD, word);
-        break;
-    case 'c':
-        cheat_mode(tries, state);
-        break;
-    }
-}
-
-int msg_word(options_t * options, char * content) {
-    int local_tries = options->tries;
-    int local_state = options->state;
-    print_state(options->state);
-    printf("\nHere is the word to guess : %s \n"
-           "You have %d chance left",
-           content, options->tries);
-    if (game_loop_menu(&local_tries, &local_state) == -1)
-    return -1;
-}
-
 int parse_msg(int socket_server, char *msg, options_t *options) {
     int code = 0;
     char content[MSG_SIZE];
@@ -89,8 +12,66 @@ int parse_msg(int socket_server, char *msg, options_t *options) {
     case MSG_END_GAME:
         printf("\nYou %s !\n", content);
         return -1;
-    case MSG_WORD:
-        msg_word(options, content);
+    case MSG_WORD:;
+        char choice = 'x';
+        char letter = 'a';
+        char word[MSG_SIZE];
+        print_state(options->state);
+        printf("\nHere is the word to guess : %s \n"
+               "You have %d chance left",
+               content, options->tries);
+        do
+        {
+            print_game_loop_menu();
+            if (!scanf(" %c", &choice))
+                perror("\nAn error has occured");
+        } while (choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c');
+        switch (choice)
+        {
+        case 'q':
+            printf("\nYou gave up\n");
+            send_string(MSG_END_GAME, "gaveup");
+            break;
+        case 'l':
+            do
+            {
+                printf("\nWhich letter ? : ");
+                scanf(" %c", &letter);
+            } while ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
+            send_letter(MSG_LETTER, letter);
+            options->state++;
+            options->tries--;
+            break;
+        case 'w':
+        do {
+            printf("\nWhich word ? : ");
+            scanf(" %s^[\n]", word);
+        } while(check_string_char(word) == -1);
+            send_string(MSG_WORD, word);
+            break;
+        case 'c':
+            printf("\nENTERING CHEAT MODE");
+            send_string(MSG_CHEAT_CODE, "Konami Code");
+            do
+            {
+                print_cheat_mode();
+                printf("\nWhich letter ? : ");
+                scanf(" %c", &letter);
+            } while (letter != 'l' && letter != 'i' && letter != 'w');
+            switch (letter) {
+                case 'w' :
+                    send_string(CHEAT_AUTOWIN, "");
+                    break;
+                case 'l':
+                    send_string(CHEAT_LETTER, "");
+                    break;
+                case 'i':
+                    options->tries++;
+                    send_string(CHEAT_INC_LIFE, "");
+                    break;
+            }
+            break;
+        }
         break;
     default:
         break;
@@ -108,22 +89,20 @@ int connect_server() {
 }
 
 void close_connection() {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     sprintf(msg, "%d", MSG_QUIT);
     send(socket_server, msg, MSG_SIZE, 0);
     close(socket_server);
-    free(msg);
 }
 
 int send_letter(int sig, char letter) {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     sprintf(msg, "%d %c", sig, letter);
     return send(socket_server, msg, MSG_SIZE, 0);
-    free(msg);
 }
 
 int receive_options(options_t *options) {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     int check;
     sprintf(msg, "%d %s", MSG_OPTIONS_REQ, options->name);
     send(socket_server, msg, MSG_SIZE, 0);
@@ -161,17 +140,15 @@ int receive_options(options_t *options) {
 }
 
 int start_game() {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     int check;
     sprintf(msg, "%d", MSG_START_GAME);
     send(socket_server, msg, MSG_SIZE, 0);
-    free(msg);
 }
 
 int game_loop(options_t *options) {
-    char *msg;
+    char msg[MSG_SIZE];
     bool give_up = false;
-    msg = malloc(256);
     do {
         if (recv(socket_server, msg, MSG_SIZE, 0) == -1) {
             perror("recv in game loop");
@@ -180,21 +157,18 @@ int game_loop(options_t *options) {
                 give_up = true;
             }
         }
-        free(msg);
-    } while (give_up == false);
+    }while(give_up == false);
     return -1;
 }
 
 int send_string(int sig, char *content) {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     sprintf(msg, "%d %s", sig, content);
     send(socket_server, msg, MSG_SIZE, 0);
-    free(msg);
 }
 
 void send_quit() {
-    char *msg = malloc(MSG_SIZE);
+    char msg[MSG_SIZE];
     sprintf(msg, "%d", MSG_QUIT);
     send(socket_server, msg, MSG_SIZE, 0);
-    free(msg);
 }
