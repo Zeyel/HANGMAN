@@ -1,5 +1,8 @@
+/*INCLUDES*/
 #include "menus.h"
+/////////////////////////////
 
+/*FUNCTIONS*/
 void print_main_menu() {
     printf("\nMain Menu :"
            "\n   Press 'r' if you want to see the game rules"
@@ -8,28 +11,25 @@ void print_main_menu() {
            "\n   Press 'q' to quit the game"
            "\n");
 }
-
 void print_credits() {
     printf("\nMade by :"
            "\n- Tim BRANSTETT : https://github.com/Zeyel"
            "\n- Florent VAIDIE : https://github.com/Lyner-Eoria"
            "\n\n");
 }
-
 void print_rules() {
     printf("\nRules :"
            "\n\n  HANGMAN is a quick game to play with words and letters"
            "\n  You will have several tries to guess the masked word by writing down letters in the console"
-           "\n  If you guessed it right, the letter will now appear in the masked word"
+           "\n  If you guessed it right, the letter will appear in the masked word"
            "\n  If your guess is wrong, you will lose a life and the hangman will build a bit more"
-           "\n  If you have no tries left, you lose the game"
+           "\n  If you have no tries left, the hangman is complete. You lose the game"
            "\n  If you manage to guess the word before, you win"
            "\n"
-           "\n  You have the possibility from the options menu, to change the rules of the game,"
+           "\n  You have many possibilities from the options menu,"
            "\n  feel free to explore them"
            "\n\n");
 }
-
 void print_game_menu() {
     printf("\nGame menu :"
            "\n Press 'g' to start a new game"
@@ -40,7 +40,6 @@ void print_game_menu() {
            "\n Press 'q' to go back to the main menu"
            "\n\n");
 }
-
 void print_game_loop_menu() {
     printf("\nWhat do you want to do ?"
             "\n Press 'q' to give up"
@@ -49,7 +48,6 @@ void print_game_loop_menu() {
             "\n I heard that there was a secret option..."
             "\n\n");
 }
-
 void print_cheat_mode() {
     printf("\nSECRET MENU :"
            "\n Press 'l' to reveal the first unknown letter"
@@ -57,7 +55,6 @@ void print_cheat_mode() {
            "\n Press 'i' to increment the remaining tries"
            "\n\n");
 }
-
 void print_state(int n) {
 
     /*
@@ -975,3 +972,4 @@ void print_state(int n) {
             perror("ERROR");
     }
 }
+/////////////////////////////

@@ -1,15 +1,13 @@
+/*INCLUDE*/
 #include "server_functions.h"
-/*VARIABLES*/
-
+/////////////////////////////
 /*FUNCTIONS*/
-
 int randomizer(int max, options_t *options) {
     int res = rand() % max;
     printf("test %d\n", res);
     if(options->max) {
         while(res < options->min || res > options->max) {
             res = rand() % max;
-            printf("test %d\n", res);
         }
     }
     return res;
@@ -73,3 +71,4 @@ void *start_game(void *client) {
 
     return NULL;
 }
+/////////////////////////////

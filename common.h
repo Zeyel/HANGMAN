@@ -12,6 +12,8 @@
 #include <stdbool.h>
 #include <ctype.h>
 
+
+/*SIGNAL RECIEVED TO INTERPRETE THE MESSAGE */
 #define MSG_QUIT -1
 #define MSG_CHEAT_CODE 666
 #define MSG_START_GAME 2
@@ -35,6 +37,7 @@
 #define CHEAT_AUTOWIN 21
 #define CHEAT_INC_LIFE 22
 
+/* SIZE OF A CHAR * OR A MESSAGE BEING SENT */
 #define MSG_SIZE 256
 
 #define CONNECT_PORT 50000
@@ -59,8 +62,8 @@ typedef struct
     char list[100];
     int time;
     game_type_t type;
-} options_t;
+} options_t; // STRUCTURE CONTAINING GAME OPTIONS
 
-void init_options(options_t *options);
+void init_options(options_t *options); // Initializing the options because it has char * and default options
 
 #endif

@@ -1,50 +1,71 @@
+/*INCLUDES*/
 #include "client_functions.h"
-
+/////////////////////////////
+/*FUNCTIONS*/
+int is_int(int floor, int ceiling, char *instructions) {
+    int answer = -1;
+    do {
+        printf("\n%s\n", instructions);
+        scanf(" %d", &answer);
+    } while (answer < floor || answer > ceiling);
+    return answer;
+}
+char is_char(char *instructions, char a, char b, char c) {
+    char answer;
+    do
+    {
+        printf("\n%s\n", instructions);
+        scanf(" %c", &answer);
+    } while (answer != a && answer != b && answer != c);
+    return answer;
+}
+int y_or_n_into_int(char *instructions, char *instructions2, int floor, int ceiling) {
+    char c;
+    int answer = -1;
+    do {
+        printf("\n%s\n", instructions);
+        scanf( " %c", &c);
+    } while(c != 'y' && c != 'n');
+    if(c =='y') {
+        answer = is_int(floor, ceiling, instructions2);
+    }
+    return answer;
+}
+char y_or_n_into_char(char *instructions, char *instructions2, char a, char b, char c) {
+    char choice;
+    char answer = '/';
+    do
+    {
+        printf("\n%s\n", instructions);
+        scanf(" %c", &choice);
+    } while (choice != 'y' && choice != 'n');
+    if (choice == 'y')
+    {
+        answer = is_char(instructions2, a, b, c);
+    }
+    return answer;
+}
 int create_ruleset(char *name, options_t server)
 {
-    int i_answer = 0;
-    char c_answer;
+    int num = -1;
+    char charact = '/';
     char txt_answer[MSG_SIZE];
-
     printf("\nChanging rules");
-
     options_t custom_rules;
     init_options(&custom_rules);
     strcpy(custom_rules.name, name);
     custom_rules.min = server.min;
-    do
-    {
-        printf("\n\nDo you wish to modify the number of tries ? y/n"
-               "\n Current value : %d \n",
-               server.tries);
-        scanf(" %c", &c_answer);
-        if (c_answer == 'y')
-        {
-            do
-            {
-                printf("\nTo which value ? (between 1 and 64): ");
-                scanf(" %d", &i_answer);
-            } while (i_answer < 1 || i_answer > 64);
-            custom_rules.tries = i_answer;
-            custom_rules.state = 64 - custom_rules.tries;
-        }
-    } while ((c_answer != 'y') && (c_answer != 'n'));
-    do
-    {
-        printf("\n\nDo you wish to modify the minimum length of the word ? y/n"
-               "\n Current value : %d \n",
-               server.min);
-        scanf(" %c", &c_answer);
-        if (c_answer == 'y')
-        {
-            do
-            {
-                printf("\nTo which value ? (between 0 and 15): ");
-                scanf(" %d", &i_answer);
-            } while (i_answer < 0 || i_answer > 15);
-            custom_rules.min = i_answer;
-        }
-    } while ((c_answer != 'y') && (c_answer != 'n'));
+    num = y_or_n_into_int("Do you wish to modify the number of tries ? y/n", 
+                    "To which value ? between 1 and 64 : ",
+                    1, 64);
+    if (num != -1)
+        custom_rules.tries = num;
+    num = y_or_n_into_int("Do you wish to modify the minimum length of the word ? y/n",
+                    "To which value ? between 0 and 15 :",
+                    0, 15);
+    if (num != -1)
+        custom_rules.min = num;
+    char c_answer;
     do
     {
         if (custom_rules.min <= server.max)
@@ -64,52 +85,30 @@ int create_ruleset(char *name, options_t server)
             do
             {
                 printf("\nTo which value ? (between 0 and 20 and more or equal to the min): ");
-                scanf(" %d", &i_answer);
-            } while (i_answer < 1 || i_answer > 64 || i_answer < custom_rules.min);
-            custom_rules.max = i_answer;
+                scanf(" %d", &num);
+            } while (num < 1 || num > 64 || num < custom_rules.min);
+            custom_rules.max = num;
         }
     } while ((c_answer != 'y') && (c_answer != 'n'));
-    do
-    {
-        printf("\n\nDo you wish to modify the word list used ? y/n"
-               "\n Current value : %s \n",
-               server.list);
-        scanf(" %c", &c_answer);
-        if (c_answer == 'y')
-        {
-            do
-            {
-                printf("\n Press 'w' for 'word_list.txt'"
-                       "\n Press 'f' for 'french_list.txt'"
-                       "\n Press 'c' for 'custom_list.txt'"
-                       "\nTo which value ? w / f / c): ");
-                scanf(" %c", &c_answer);
-            } while (c_answer != 'w' && c_answer != 'f' && c_answer != 'c');
-            if (c_answer == 'c')
-                strcpy(custom_rules.list, "custom_list.txt");
-            else if (c_answer == 'f')
-                strcpy(custom_rules.list, "french_list.txt");
-            else
-                strcpy(custom_rules.list, "word_list.txt");
-            c_answer = 'n';
+    charact = y_or_n_into_char("Do you wish to modify the word list used ? y/n",
+                                   "\n Press 'w' for 'word_list.txt'"
+                                   "\n Press 'f' for 'french_list.txt'"
+                                   "\n Press 'c' for 'custom_list.txt'"
+                                   "\nTo which value ? w / f / c : ", 'w', 'f', 'c');
+    if (charact != '/') {
+        if (charact == 'c')
+            strcpy(custom_rules.list, "custom_list.txt");
+        else if (charact =='f')
+            strcpy(custom_rules.list, "french_list.txt");
+        else
+            strcpy(custom_rules.list, "word_list.txt");
         }
-    } while ((c_answer != 'y') && (c_answer != 'n'));
-    do
-    {
-        printf("\n\nDo you wish to modify the time limit ? y/n"
-               "\n Current value : %d \n",
-               server.time);
-        scanf(" %c", &c_answer);
-        if (c_answer == 'y')
-        {
-            do
-            {
-                printf("\nTo which value ? (between 0 and 15 minutes): ");
-                scanf(" %d", &i_answer);
-            } while (i_answer < 0 || i_answer > 15);
-            custom_rules.time = i_answer;
-        }
-    } while ((c_answer != 'y') && (c_answer != 'n'));
+    num = y_or_n_into_int("Do you wish to modify the time limit ? y/n",
+                                 "To which value ? between 0 and 15 minutes : ",
+                              0, 15);
+    if (num != -1)
+          custom_rules.time = num;
+
     if (custom_rules.tries != server.tries)
     {
         sprintf(txt_answer, "%d", custom_rules.tries);
@@ -151,7 +150,6 @@ int create_ruleset(char *name, options_t server)
         }
     }
 }
-
 void show_options(options_t options)
 {
     printf("\nCurrent options :"
@@ -166,7 +164,6 @@ void show_options(options_t options)
            options.name, options.tries, options.min, options.max,
            options.state, options.list, options.time, options.type);
 }
-
 int check_string_char(char *string) {
     for (int i =0 ; i< strlen(string) ; i++) {
         if(isalpha(string[i]) == 0) {
@@ -175,9 +172,9 @@ int check_string_char(char *string) {
     }
     return 0;
 }
-
 void quit_game()
 {
     printf("\nThank you for playing. Good bye !\n");
     close_connection();
 }
+/////////////////////////////
