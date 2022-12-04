@@ -11,8 +11,7 @@ int main() {
     int local_state;
     options_t local_options;
     init_options(&local_options);
-    do // Loop for username
-    {
+    do { // Loop : Username
         printf("\nPlease enter your name :");
         scanf(" %s^[\n]", local_options.name);
         printf("\nHello %s", local_options.name);
