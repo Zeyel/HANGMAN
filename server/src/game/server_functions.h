@@ -13,7 +13,5 @@ int randomizer(int max, options_t *options);  // Return a random int between 0 a
 int length_list(char *);                      // Return the size of a file.txt with a word on every line
 void add_word(char *word);                    // Add a word to custom_list.txt
 char *load_word(int n, char *txt);            // Load a word at the n line from the txt.txt
-int current_state(int n, options_t *options); // Return the current state of the game
-void *start_game(void *client);               // Start a game when the client is requesting it
 /////////////////////////////
 #endif

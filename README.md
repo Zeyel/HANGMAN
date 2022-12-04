@@ -20,8 +20,8 @@ If Linux :
 * One in the server folder
 * One in the client folder
 
-The code works with IP adresses, it has been set to localhost because
-it is easier to handle, but if you want to test it, change these fields to your IP Adress :
+The code works with IP adresses not only localhost, it has been set to localhost because
+it is easier to handle to launch on several computers, but if you want to try it, change these fields to your IP Adress :
 * connection_server:init_server:112 : `inet_aton("[YOURIPADRESS]"`
 * connection_client:connect_server:86 : `inet_aton("[YOURIPADRESS]")`
 
@@ -30,3 +30,4 @@ Command :
 
 
 # If Visual Studio Code shows error, it's from Windows who can't compile it
+# If you're using WSL and want to change IP Address, don't forget that you have to change your IP to the Linux distribution, not your Windows one

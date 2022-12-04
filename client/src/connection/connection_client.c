@@ -1,10 +1,16 @@
+/*  CONNECTION_CLIENT
+    Contains all the connection and server related functions
+*/
+
+/*INCLUDES*/
 #include "connection_client.h"
 #include "../menus/menus.h"
 #include "../game/client_functions.h"
-
+/////////////////////////////
+/*VARIABLES*/
 int socket_server;
-
-int parse_msg(int socket_server, char *msg, options_t *options) {
+/////////////////////////////
+int parse_msg(int socket_server, char *msg, options_t *options, int *local_tries, int *local_state) {
     int code = 0;
     char content[MSG_SIZE];
     sscanf(msg, "%d %s", &code, content);
@@ -16,10 +22,10 @@ int parse_msg(int socket_server, char *msg, options_t *options) {
         char choice = 'x';
         char letter = 'a';
         char word[MSG_SIZE];
-        print_state(options->state);
+        print_state(*local_state);
         printf("\nHere is the word to guess : %s \n"
                "You have %d chance left",
-               content, options->tries);
+               content, *local_tries);
         do
         {
             print_game_loop_menu();
@@ -39,8 +45,8 @@ int parse_msg(int socket_server, char *msg, options_t *options) {
                 scanf(" %c", &letter);
             } while ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
             send_letter(MSG_LETTER, letter);
-            options->state++;
-            options->tries--;
+            *local_state+=1;
+           *local_tries-=1;
             break;
         case 'w':
         do {
@@ -66,7 +72,8 @@ int parse_msg(int socket_server, char *msg, options_t *options) {
                     send_string(CHEAT_LETTER, "");
                     break;
                 case 'i':
-                    options->tries++;
+                    *local_tries+=1;
+                    *local_state-=1;
                     send_string(CHEAT_INC_LIFE, "");
                     break;
             }
@@ -83,7 +90,7 @@ int connect_server() {
     memset(&address_server, 0, sizeof(address_server));
     address_server.sin_family = IPV4;
     address_server.sin_port = htons(CONNECT_PORT);
-    inet_aton("127.0.0.1", &address_server.sin_addr);
+    inet_aton("127.0.0.1", &address_server.sin_addr);   //Change this line to your local IP Address
     socket_server = socket(IPV4, TCP, PROTOCOL);
     connect(socket_server, (struct sockaddr *)&address_server, sizeof address_server);
 }
@@ -146,14 +153,14 @@ int start_game() {
     send(socket_server, msg, MSG_SIZE, 0);
 }
 
-int game_loop(options_t *options) {
+int game_loop(options_t *options, int *local_tries, int *local_state) {
     char msg[MSG_SIZE];
     bool give_up = false;
     do {
         if (recv(socket_server, msg, MSG_SIZE, 0) == -1) {
             perror("recv in game loop");
         } else {
-            if (parse_msg(socket_server, msg, options)== -1) {
+            if (parse_msg(socket_server, msg, options, local_tries, local_state)== -1) {
                 give_up = true;
             }
         }

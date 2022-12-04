@@ -39,10 +39,10 @@ int parse_msg(int client, char *msg, options_t *options_client)
         printf("The word %s at the %d line has been selected\n", hangman_word, line);
         printf("\nThis will be displayed to the client : %s\n", underscore);
         printf(" %d chances remaining", tries_local);
-        if (!(options_client->time >= 0))
+        if (options_client->time >= 0)
         {
             timer_local = time(NULL);
-            printf("Timer set to %d", timer_local);
+            printf("\nTimer set to %d", timer_local);
         }
         else
         {
@@ -109,7 +109,7 @@ int init_server() // Setup the socket, bind and listen
     memset(&address_server, 0, sizeof(address_server));
     address_server.sin_family = IPV4;
     address_server.sin_port = htons(CONNECT_PORT);
-    inet_aton("127.0.0.1", &address_server.sin_addr);
+    inet_aton("127.0.0.1", &address_server.sin_addr);   // You can change this line to your local IP Address
     bind(server_socket, (struct sockaddr *)&address_server, sizeof address_server);
     listen(server_socket, SOMAXCONN);
     return server_socket;
@@ -143,7 +143,7 @@ void *wait_client(void *p_client_socket) // Waiting for instructions after the t
     printf("Thread %d to close\n", client_socket);
 }
 
-int msg_letter(int client, char *msg, char *word, char *underscore, int *tries, char *content)
+int msg_letter(int client, char *msg, char *word, char *underscore, int *tries, char *content) // Compare the letter to the word, find all occurences and change them in underscore, send it after
 {
     bool non_full = false;
     char c[20] = "";
@@ -183,7 +183,7 @@ int msg_letter(int client, char *msg, char *word, char *underscore, int *tries, 
     }
 }
 
-int msg_word(int client, char *word, char *content)
+int msg_word(int client, char *word, char *content) // Compare word with content, make lose if they are not equal
 {
     for (int i = 0; i < strlen(content); i++)
     {
@@ -203,7 +203,7 @@ int msg_word(int client, char *word, char *content)
     }
 }
 
-int cheat_letter(int client, char *word, char *underscore)
+int cheat_letter(int client, char *word, char *underscore) // Give the first unknown and all occurences and send it
 {
     bool non_full = false;
     char l = '\0';
@@ -243,7 +243,7 @@ int cheat_letter(int client, char *word, char *underscore)
     }
 }
 
-int msg_cheat_code(int client, char *word, char *underscore, int *tries)
+int msg_cheat_code(int client, char *word, char *underscore, int *tries) // Waiting for cheat input from the client
 {
     char cheat_msg[MSG_SIZE];
     int code;
@@ -272,17 +272,18 @@ int msg_cheat_code(int client, char *word, char *underscore, int *tries)
     }
 }
 
-int game_loop(int client, int *tries, int *timer, int options_timer, char *msg, char *word, char *underscore)
+int game_loop(int client, int *tries, int *timer, int options_timer, char *msg, char *word, char *underscore) // Waiting for game input from the client
 {
     printf("\n\nNew game request \n\n from client : %d \n", client);
     printf("Message parsed : %s\n\n", msg, msg);
     int code = 0;
     char content[MSG_SIZE];
     sscanf(msg, "%d %s", &code, content);
-    if (*timer == 0 || *timer + 60 * options_timer >= time(NULL))
+    if (*timer == 0 || *timer + (60 * options_timer) >= time(NULL))
     {
-        if (*timer > 0)
-            printf("\nTime remaining : %d s\n", *timer - time(NULL));
+        // if (*timer > 0)
+            printf("\nTime remaining : %d s\n", *timer +(60 * options_timer) - time(NULL));
+        printf("\nRemaining tries : %d", *tries -1);
         switch (code)
         {
         case MSG_LETTER:
@@ -313,7 +314,7 @@ int game_loop(int client, int *tries, int *timer, int options_timer, char *msg, 
     }
 }
 
-int send_options(int client, options_t *options_client)
+int send_options(int client, options_t *options_client) // Send the options to the client
 {
 
     if (send_string(client, STRCT_NAME, options_client->name) == -1)
@@ -334,14 +335,14 @@ int send_options(int client, options_t *options_client)
         perror("Error when sending type");
 }
 
-int send_int(int client, int sig, int content)
+int send_int(int client, int sig, int content) // Send an int to the client
 {
     char msg[MSG_SIZE];
     sprintf(msg, "%d %d", sig, content);
     send(client, msg, MSG_SIZE, 0);
 }
 
-int send_string(int client, int sig, char *content)
+int send_string(int client, int sig, char *content) // Send a string to the client
 {
     char msg[MSG_SIZE];
     sprintf(msg, "%d %s", sig, content);

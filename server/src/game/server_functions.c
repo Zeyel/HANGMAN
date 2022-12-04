@@ -1,8 +1,12 @@
+/*  SERVER_FUNCTION
+    Contains all local functions
+*/
+
 /*INCLUDE*/
 #include "server_functions.h"
 /////////////////////////////
 /*FUNCTIONS*/
-int randomizer(int max, options_t *options) {
+int randomizer(int max, options_t *options) { // Return a random int between 0 and max, in order to pick a random item from a table
     int res = rand() % max;
     printf("test %d\n", res);
     if(options->max) {
@@ -13,7 +17,7 @@ int randomizer(int max, options_t *options) {
     return res;
 }
 
-int length_list(char *txt) {
+int length_list(char *txt) { // Return the size of a file.txt with a word on every line
     FILE *word_list;
     int res = 0;
     char nom[100];
@@ -33,13 +37,13 @@ int length_list(char *txt) {
     return res;
 }
 
-void add_word(char word[MAXWORD]) {
+void add_word(char word[MAXWORD]) { // Add a word to custom_list.txt
     FILE *list = fopen("src/game/txt/custom_list.txt", "a+");
     fprintf(list, "\n%s", word);
     fclose(list);
 }
 
-char *load_word(int n, char *txt) {
+char *load_word(int n, char *txt) { // Load a word at the n line from the txt.txt
     FILE *word_list;
     char nom[100];
     char * result = malloc(MAXWORD);
@@ -63,12 +67,4 @@ char *load_word(int n, char *txt) {
     fclose(word_list);
 }
 
-int current_state(int n, options_t *options) {
-    return options->state;
-}
-
-void *start_game(void *client) {
-
-    return NULL;
-}
 /////////////////////////////
