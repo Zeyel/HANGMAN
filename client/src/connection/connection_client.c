@@ -4,8 +4,8 @@
 
 /*INCLUDES*/
 #include "connection_client.h"
-#include "../menus/menus.h"
 #include "../game/client_functions.h"
+#include "../menus/menus.h"
 /////////////////////////////
 /*VARIABLES*/
 int socket_server;
@@ -15,73 +15,69 @@ int parse_msg(int socket_server, char *msg, options_t *options, int *local_tries
     char content[MSG_SIZE];
     sscanf(msg, "%d %s", &code, content);
     switch(code) {
-    case MSG_END_GAME:
-        printf("\nYou %s !\n", content);
-        return -1;
-    case MSG_WORD:;
-        char choice = 'x';
-        char letter = 'a';
-        char word[MSG_SIZE];
-        print_state(*local_state);
-        printf("\nHere is the word to guess : %s \n"
-               "You have %d chance left",
-               content, *local_tries);
-        do
-        {
-            print_game_loop_menu();
-            if (!scanf(" %c", &choice))
-                perror("\nAn error has occured");
-        } while (choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c');
-        switch (choice)
-        {
-        case 'q':
-            printf("\nYou gave up\n");
-            send_string(MSG_END_GAME, "gaveup");
-            break;
-        case 'l':
-            do
-            {
-                printf("\nWhich letter ? : ");
-                scanf(" %c", &letter);
-            } while ((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
-            send_letter(MSG_LETTER, letter);
-            *local_state+=1;
-           *local_tries-=1;
-            break;
-        case 'w':
-        do {
-            printf("\nWhich word ? : ");
-            scanf(" %s^[\n]", word);
-        } while(check_string_char(word) == -1);
-            send_string(MSG_WORD, word);
-            break;
-        case 'c':
-            printf("\nENTERING CHEAT MODE");
-            send_string(MSG_CHEAT_CODE, "Konami Code");
-            do
-            {
-                print_cheat_mode();
-                printf("\nWhich letter ? : ");
-                scanf(" %c", &letter);
-            } while (letter != 'l' && letter != 'i' && letter != 'w');
-            switch (letter) {
-                case 'w' :
-                    send_string(CHEAT_AUTOWIN, "");
+        case MSG_END_GAME:
+            printf("\nYou %s !\n", content);
+            return -1;
+        case MSG_WORD:;
+            char choice = 'x';
+            char letter = 'a';
+            char word[MSG_SIZE];
+            print_state(*local_state);
+            printf("\nHere is the word to guess : %s \n"
+                   "You have %d chance left",
+                   content, *local_tries);
+            do {
+                print_game_loop_menu();
+                if(!scanf(" %c", &choice))
+                    perror("\nAn error has occured");
+            } while(choice != 'q' && choice != 'l' && choice != 'w' && choice != 'c');
+            switch(choice) {
+                case 'q':
+                    printf("\nYou gave up\n");
+                    send_string(MSG_END_GAME, "gaveup");
                     break;
                 case 'l':
-                    send_string(CHEAT_LETTER, "");
+                    do {
+                        printf("\nWhich letter ? : ");
+                        scanf(" %c", &letter);
+                    } while((letter < 'a' || letter > 'z') && (letter < 'A' || letter > 'Z'));
+                    send_letter(MSG_LETTER, letter);
+                    *local_state += 1;
+                    *local_tries -= 1;
                     break;
-                case 'i':
-                    *local_tries+=1;
-                    *local_state-=1;
-                    send_string(CHEAT_INC_LIFE, "");
+                case 'w':
+                    do {
+                        printf("\nWhich word ? : ");
+                        scanf(" %s^[\n]", word);
+                    } while(check_string_char(word) == -1);
+                    send_string(MSG_WORD, word);
+                    break;
+                case 'c':
+                    printf("\nENTERING CHEAT MODE");
+                    send_string(MSG_CHEAT_CODE, "Konami Code");
+                    do {
+                        print_cheat_mode();
+                        printf("\nWhich letter ? : ");
+                        scanf(" %c", &letter);
+                    } while(letter != 'l' && letter != 'i' && letter != 'w');
+                    switch(letter) {
+                        case 'w':
+                            send_string(CHEAT_AUTOWIN, "");
+                            break;
+                        case 'l':
+                            send_string(CHEAT_LETTER, "");
+                            break;
+                        case 'i':
+                            *local_tries += 1;
+                            *local_state -= 1;
+                            send_string(CHEAT_INC_LIFE, "");
+                            break;
+                    }
                     break;
             }
             break;
-        }
-        break;
-    default:
-        break;
+        default:
+            break;
     }
 }
 
@@ -90,7 +86,7 @@ int connect_server() {
     memset(&address_server, 0, sizeof(address_server));
     address_server.sin_family = IPV4;
     address_server.sin_port = htons(CONNECT_PORT);
-    inet_aton("127.0.0.1", &address_server.sin_addr);   //Change this line to your local IP Address
+    inet_aton("127.0.0.1", &address_server.sin_addr); // Change this line to your local IP Address
     socket_server = socket(IPV4, TCP, PROTOCOL);
     connect(socket_server, (struct sockaddr *)&address_server, sizeof address_server);
 }
@@ -157,14 +153,15 @@ int game_loop(options_t *options, int *local_tries, int *local_state) {
     char msg[MSG_SIZE];
     bool give_up = false;
     do {
-        if (recv(socket_server, msg, MSG_SIZE, 0) == -1) {
+        if(recv(socket_server, msg, MSG_SIZE, 0) == -1) {
             perror("recv in game loop");
-        } else {
-            if (parse_msg(socket_server, msg, options, local_tries, local_state)== -1) {
+        }
+        else {
+            if(parse_msg(socket_server, msg, options, local_tries, local_state) == -1) {
                 give_up = true;
             }
         }
-    }while(give_up == false);
+    } while(give_up == false);
     return -1;
 }
 

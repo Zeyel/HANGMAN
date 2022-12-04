@@ -42,11 +42,11 @@ void print_game_menu() {
 }
 void print_game_loop_menu() {
     printf("\nWhat do you want to do ?"
-            "\n Press 'q' to give up"
-            "\n Press 'l' to guess a letter"
-            "\n Press 'w' to guess the word (/!\\ A mistake makes you lose)"
-            "\n I heard that there was a secret option..."
-            "\n\n");
+           "\n Press 'q' to give up"
+           "\n Press 'l' to guess a letter"
+           "\n Press 'w' to guess the word (/!\\ A mistake makes you lose)"
+           "\n I heard that there was a secret option..."
+           "\n\n");
 }
 void print_cheat_mode() {
     printf("\nSECRET MENU :"
@@ -291,7 +291,7 @@ void print_state(int n) {
                  "\n              " // Line 7
                  "\n              " // Line 8
                  "\n              " // Line 9
-                 " /            " // Line 10
+                 " /            "   // Line 10
                  "\n/▀▀▀▀▀▀▀▀▀▀▀▀▀" // Line 11
             );
             break;

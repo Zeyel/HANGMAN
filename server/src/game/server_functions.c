@@ -46,13 +46,13 @@ void add_word(char word[MAXWORD]) { // Add a word to custom_list.txt
 char *load_word(int n, char *txt) { // Load a word at the n line from the txt.txt
     FILE *word_list;
     char nom[100];
-    char * result = malloc(MAXWORD);
+    char *result = malloc(MAXWORD);
     strcpy(nom, "src/game/txt/");
     strcat(nom, txt);
     if((word_list = fopen(nom, "r")) != NULL) {
 
         for(int i = 0; i <= n; i++) {
-            if(i == n-1 || i == n) {
+            if(i == n - 1 || i == n) {
                 fscanf(word_list, "%s", result);
                 return result;
             }
