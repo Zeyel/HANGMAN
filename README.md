@@ -31,3 +31,5 @@ Command :
 
 # If Visual Studio Code shows error, it's from Windows who can't compile it
 # If you're using WSL and want to change IP Address, don't forget that you have to change your IP to the Linux distribution, not your Windows one
+
+Trying SonarQube
